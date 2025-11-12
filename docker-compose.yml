@@ -1,0 +1,21 @@
+
+services:
+  phu-dashboard:
+    build: .
+    container_name: phu-dashboard
+    restart: unless-stopped
+    command: pnpm dev --host
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+    ports:
+      - "5173:5173"    # Vite Dev Server
+      - "4173:4173"    # Optional Preview-Port
+    environment:
+      - NODE_ENV=development
+    networks:
+      - core_network
+
+networks:
+  core_network:
+    external: true

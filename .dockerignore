@@ -1,0 +1,30 @@
+# Node / Build Artefakte
+node_modules
+dist
+.cache
+.vscode
+.idea
+
+# Logs & temporäre Dateien
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+.DS_Store
+
+# Git & lokale Dateien
+.git
+.gitignore
+.env.local
+.env.development.local
+.env.production.local
+
+# OS / Editor / Backup
+Thumbs.db
+*.swp
+*.bak
+*.tmp
+
+# Sonstiges
+*.pid
+*.seed

@@ -1,0 +1,25 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap");
+
+@theme {
+  --color-bg: #232634;
+  --color-surface: #303446;
+  --color-elev: #2c2f3a;
+  --color-border: #414559;
+
+  --color-fg: #c6d0f5;
+  --color-muted: #838ba7;
+
+  --color-ok: #a6d189;
+  --color-pop: #ef9f76;
+}
+
+@layer base {
+  html, body, #root {
+    height: 100%
+
+  }
+  body {
+    @apply bg-bg text-fg;
+  }
+}

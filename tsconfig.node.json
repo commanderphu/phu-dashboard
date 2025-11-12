@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+
+    "composite": true,
+
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode (Vite 5) */
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+
+    /* meist nicht nötig für vite.config.ts; kann weg */
+    "allowImportingTsExtensions": false,
+
+    /* wir emittieren nichts aus dem Node-Projekt */
+    "noEmit": true,
+
+    /* Linting/Striktheit */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+
+    /* Node-Typen für vite.config.ts, Scripts, etc. */
+    "types": ["node"]
+  },
+  "include": [
+    "vite.config.ts",
+    "node-env.d.ts",
+    "scripts/**/*.ts"
+  ]
+}
