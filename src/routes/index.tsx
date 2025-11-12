@@ -9,6 +9,7 @@ import { IconHome, IconBus, IconCloud, IconMusic, IconBattery, IconSettings } fr
 const OverviewPage    = lazy(() => import("@/pages/Overview").then(m => ({ default: m.Overview })));
 const VerkehrPage     = lazy(() => import("@/pages/Verkehr").then(m => ({ default: m.Verkehr })));
 const WetterPage      = lazy(() => import("@/pages/Wetter").then(m => ({ default: m.Wetter })));
+const MusicPage       = lazy(() => import("@/pages/MusicPage").then(m => ({ default: m.default })));
 const PlaceholderPage = lazy(() => import("@/pages/Placeholder").then(m => ({ default: m.Placeholder })));
 
 export type RouteItem = {
@@ -48,7 +49,7 @@ export const routes: RouteItem[] = [
     label: "Musik",
     icon: IconMusic,
     group: "more",
-    element: () => <PlaceholderPage title="Musik" hint="Demnächst Now-Playing von Jellyfin" />,
+    element: () => <MusicPage />,
   },
   {
     to: PATH.energie,
@@ -66,15 +67,16 @@ export const routes: RouteItem[] = [
   },
 ];
 
-export function groupRoutes() {
+const groupRoutes = () => {
   const primary = routes.filter((r) => (r.group ?? "primary") === "primary");
   const more    = routes.filter((r) => (r.group ?? "primary") === "more");
   return { primary, more };
-}
+};
+
 
 export const toDockItems = () => {
   const { primary, more } = groupRoutes();
   return [...primary, ...more].map((r) => ({ to: r.to, label: r.label, icon: r.icon!, end: r.end }));
 };
 
-export { PATH };
+export { PATH , groupRoutes}; 

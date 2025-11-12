@@ -23,3 +23,34 @@
     @apply bg-bg text-fg;
   }
 }
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes progressGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px #22c55e60);
+  }
+  50% {
+    filter: drop-shadow(0 0 10px #22c55e90);
+  }
+}
+@keyframes bar1 {
+  0%, 100% { height: 20%; opacity: 0.8; }
+  50% { height: 90%; opacity: 1; }
+}
+@keyframes bar2 {
+  0%, 100% { height: 40%; opacity: 0.7; }
+  50% { height: 70%; opacity: 1; }
+}
+@keyframes bar3 {
+  0%, 100% { height: 25%; opacity: 0.9; }
+  50% { height: 95%; opacity: 1; }
+}

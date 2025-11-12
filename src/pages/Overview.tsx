@@ -1,20 +1,27 @@
+// src/pages/Overview.tsx
 import type { Weather } from "@/lib/types";
 import { WidgetCard } from "@/ui/WidgetCard";
 import { StatCard } from "@/ui/StatCard";
 import { QuickLinks } from "@/components/QuickLinks";
 import { Wetter } from "./Wetter";
+import { SystemMonitor } from "@/components/widgets/SystemMonitor";
 
 export function Overview({ weather }: { weather: Weather }) {
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {/* 🔹 Erste Zeile: Systemdaten */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <StatCard label="Heute" value={new Date().toLocaleDateString()} />
         <StatCard label="Laune" value="⚡ fokussiert" />
         <StatCard label="Musik" value="🎧 Pop-Punk" />
         <StatCard label="System" value="🐧 Linux" />
+        <div className="xl:col-span-1">
+          <SystemMonitor />
+        </div>
       </div>
 
-      <section className="grid grid-cols-1 gap-4 lg:grid-cols-5">
+      {/* 🔹 Zweite Zeile: Widgets */}
+      <section className="grid grid-cols-1 gap-4 lg:grid-cols-5 mt-4">
         <WidgetCard
           className="lg:col-span-3"
           title="Abfahrtsmonitor – In der Goldgrube"

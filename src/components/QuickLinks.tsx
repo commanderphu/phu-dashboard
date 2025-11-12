@@ -2,7 +2,7 @@ export function QuickLinks() {
   const links = [
     { name: "Wiki", url: "https://wiki.phudevelopement.xyz" },
     { name: "Jellyfin", url: "https://jellyfin.phudevelopement.xyz" },
-    { name: "Home Assistant", url: "https://phudevelopement.xyz" },
+    { name: "Home Assistant", url: "https://home.phudevelopement.xyz" },
     { name: "GitHub", url: "https://github.com/commanderphu" },
   ];
   return (

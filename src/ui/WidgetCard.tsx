@@ -1,3 +1,4 @@
+// src/ui/WidgetCard.tsx
 export function WidgetCard({
   title,
   hint,

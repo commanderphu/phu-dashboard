@@ -1,3 +1,4 @@
+// src/lib/weather.ts
 export function codeToText(code?: number) {
   const map: Record<number, string> = {
     0: "klar",
