@@ -1,0 +1,24 @@
+# ===============================
+# ✏️ Commit Message Template
+# ===============================
+# Format: <emoji> <type>: <description>
+# Example: ✨ feat: add weather widget to overview page
+#
+# Types:
+#   ✨ feat      → neue Funktion / Modul
+#   🐛 fix       → Bugfix oder Hotfix
+#   🧹 chore     → Aufräumarbeiten, Refactoring
+#   🧾 docs      → Doku oder README-Änderungen
+#   🎨 style     → UI / CSS / Formatierung
+#   🚀 perf      → Performance-Verbesserung
+#   🧩 refactor  → Code-Umstrukturierung
+#   🧪 test      → Unit / Integration Tests
+#   ⚙️ config    → Build-, Tooling- oder DevOps-Änderungen
+#
+# Body (optional):
+#   Kurze Erklärung, warum / was sich geändert hat
+#
+# Footer (optional):
+#   Issue / Ticket Referenzen oder TODOs
+#
+# Lines starting with '#' are ignored.

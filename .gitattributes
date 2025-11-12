@@ -1,0 +1,28 @@
+# ===============================
+# ⚙️ Git Attributes
+# ===============================
+
+# Standard Textdateien (UTF-8 + LF)
+* text=auto eol=lf
+
+# Markdown & Code: Treat as text
+*.md text diff
+*.js text diff=javascript
+*.ts text diff=typescript
+*.tsx text diff=typescript
+*.css text diff
+*.html text diff
+*.yml text diff
+*.yaml text diff
+
+# Images: Binary, no diff
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+
+# Prevent export of these folders
+/.vscode export-ignore
+/.idea export-ignore
+/node_modules export-ignore
