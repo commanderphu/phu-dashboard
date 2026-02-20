@@ -1,4 +1,5 @@
 // src/pages/Overview.tsx
+import { useState } from "react";
 import type { Weather } from "@/lib/types";
 import { WidgetCard } from "@/ui/WidgetCard";
 import { StatCard } from "@/ui/StatCard";
@@ -10,6 +11,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useWidgetOrder } from "@/hooks/useWidgetOrder";
 import { useMusicData } from "@/hooks/useMusicData";
 import { useSystemInfo } from "@/hooks/useSystemInfo";
+import { getDailyGreeting } from "@/lib/dailyGreeting";
 
 import {
   DndContext,
@@ -34,6 +36,7 @@ export function Overview({ weather }: { weather: Weather }) {
   const [order, setOrder] = useWidgetOrder(DEFAULT_ORDER);
   const { nowPlaying, loading: musicLoading } = useMusicData();
   const { data: sysInfo } = useSystemInfo();
+  const [greeting] = useState(() => getDailyGreeting());
 
   const musikValue = musicLoading
     ? "…"
@@ -105,7 +108,7 @@ export function Overview({ weather }: { weather: Weather }) {
     <>
       {/* Erste Zeile: Systemdaten */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
-        <StatCard label="Heute" value={new Date().toLocaleDateString()} />
+        <StatCard label="Heute" value={greeting} />
         <StatCard label="Laune" value="⚡ fokussiert" editable storageKey="phu:statcard:laune" />
         <StatCard label="Musik" value={musikValue} to="/musik" />
         <StatCard label="System" value={sysInfo ? `🖥 ${sysInfo.host}` : "…"} />
