@@ -1,7 +1,7 @@
 import type { Weather } from "@/lib/types";
 import { WidgetCard } from "@/ui/WidgetCard";
 
-export function Wetter({ weather, compact }: { weather: Weather; compact?: boolean }) {
+export function Wetter({ weather, compact, collapsible }: { weather: Weather; compact?: boolean; collapsible?: boolean }) {
   const content = (
     <div className="grid grid-cols-4 gap-3">
       {(weather.daily.length
@@ -27,6 +27,7 @@ export function Wetter({ weather, compact }: { weather: Weather; compact?: boole
       className={compact ? "lg:col-span-2" : "lg:col-span-5"}
       title="Wetter (Koblenz)"
       hint={weather.current !== null ? `Jetzt: ${weather.current}°C` : "lädt…"}
+      collapsible={collapsible}
     >
       {content}
     </WidgetCard>

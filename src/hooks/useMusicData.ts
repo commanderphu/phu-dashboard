@@ -33,11 +33,13 @@ export function useMusicData(): MusicDataResult {
         if (!npRes.ok) throw new Error("Now-Playing konnte nicht geladen werden");
         if (!ttRes.ok) throw new Error("Top-Tracks konnten nicht geladen werden");
 
-        const nowPlayingData: NowPlaying | null = await npRes.json();
+        const npJson = await npRes.json();
         const topTracksData: MusicTopTracksResponse = await ttRes.json();
 
         if (!alive) return;
 
+        // API gibt { playing, provider, now: NowPlaying } zurück
+        const nowPlayingData: NowPlaying | null = npJson?.now ?? null;
         setNowPlaying(nowPlayingData);
         setTopTracks(topTracksData.tracks);
         // provider kommt weiter aus useMusicProvider (Single Source of Truth)
