@@ -84,3 +84,23 @@ export interface MusicTopTracksResponse {
   tracks: MusicTrack[];
 }
 
+/* ========= 🎮 Twitch ========= */
+export interface TwitchUser {
+  login: string;
+  display_name: string;
+  avatar: string;
+  description: string;
+}
+
+export interface TwitchStatus {
+  online: boolean;
+  viewerCount: number;
+  user: TwitchUser;
+}
+
+export interface TwitchData {
+  status: TwitchStatus | null;
+  followerCount: number | null;
+  loading: boolean;
+  error: string | null;
+}

@@ -6,12 +6,22 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 interface StatCardProps {
   label: string;
   value: string;
+  subtitle?: string;
   editable?: boolean;
   storageKey?: string;
   to?: string;
+  options?: string[];
 }
 
-export function StatCard({ label, value, editable = false, storageKey, to }: StatCardProps) {
+export function StatCard({
+  label,
+  value,
+  subtitle,
+  editable = false,
+  storageKey,
+  to,
+  options,
+}: StatCardProps) {
   const [storedValue, setStoredValue] = useLocalStorage<string>(
     storageKey ?? `phu:statcard:${label}`,
     value
@@ -51,29 +61,79 @@ export function StatCard({ label, value, editable = false, storageKey, to }: Sta
       >
         <div className="text-xs uppercase tracking-wide text-muted">{label}</div>
         {isEditing ? (
-          <input
-            autoFocus
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onBlur={saveEdit}
-            onKeyDown={handleKeyDown}
-            className="mt-1 w-full bg-transparent text-2xl font-semibold text-ok outline-none border-b border-ok/50"
-          />
+          options ? (
+            <div onClick={(e) => e.stopPropagation()}>
+              <div className="mt-2 grid grid-cols-2 gap-1">
+                {options.map((opt) => (
+                  <button
+                    key={opt}
+                    onClick={() => { setStoredValue(opt); setIsEditing(false); }}
+                    className={`rounded-lg border px-2 py-1 text-left text-sm transition-colors ${
+                      storedValue === opt
+                        ? "border-ok bg-ok/10 text-ok"
+                        : "border-border text-fg hover:border-ok/50"
+                    }`}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={cancelEdit}
+                className="mt-2 text-xs text-muted hover:text-fg"
+              >
+                Abbrechen
+              </button>
+            </div>
+          ) : (
+            <input
+              autoFocus
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onBlur={saveEdit}
+              onKeyDown={handleKeyDown}
+              className="mt-1 w-full bg-transparent text-2xl font-semibold text-ok outline-none border-b border-ok/50"
+            />
+          )
         ) : (
           <div className="mt-1 flex items-center gap-1">
             <span className="text-2xl font-semibold text-ok">{displayValue}</span>
             <Pencil className="h-3 w-3 text-muted opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
         )}
+        {subtitle && !isEditing && (
+          <div className="mt-1 text-xs text-muted">{subtitle}</div>
+        )}
       </div>
     );
   }
 
   if (to) {
-    return (
-      <Link to={to} className={`block group ${baseClasses} transition-colors hover:border-ok/50`}>
+    const isExternal = to.startsWith("http");
+    const content = (
+      <>
         <div className="text-xs uppercase tracking-wide text-muted">{label}</div>
         <div className="mt-1 text-2xl font-semibold text-ok truncate">{value}</div>
+        {subtitle && <div className="mt-1 text-xs text-muted">{subtitle}</div>}
+      </>
+    );
+
+    if (isExternal) {
+      return (
+        <a
+          href={to}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`block group ${baseClasses} transition-colors hover:border-ok/50`}
+        >
+          {content}
+        </a>
+      );
+    }
+
+    return (
+      <Link to={to} className={`block group ${baseClasses} transition-colors hover:border-ok/50`}>
+        {content}
       </Link>
     );
   }
@@ -82,6 +142,7 @@ export function StatCard({ label, value, editable = false, storageKey, to }: Sta
     <div className={baseClasses}>
       <div className="text-xs uppercase tracking-wide text-muted">{label}</div>
       <div className="mt-1 text-2xl font-semibold text-ok">{value}</div>
+      {subtitle && <div className="mt-1 text-xs text-muted">{subtitle}</div>}
     </div>
   );
 }
