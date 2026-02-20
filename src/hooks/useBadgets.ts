@@ -5,7 +5,11 @@ import { PATH } from "@/routes/path.ts";
 export function useBadges(weather: Weather) {
   return useMemo(() => {
     const map: Record<string, string> = {};
-    if (weather?.current != null) map[PATH.wetter] = `${Math.round(weather.current)}°`;
+
+    if (weather.current != null) {
+      map[PATH.wetter] = `${Math.round(weather.current)}°`;
+    }
+
     return map;
-  }, [weather?.current]);
+  }, [weather]); // ✅ richtig
 }

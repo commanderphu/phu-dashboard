@@ -49,3 +49,38 @@ export type WidgetProps = {
   className?: string;
   children?: JSX.Element | JSX.Element[];
 };
+
+export interface NowPlaying {
+  title: string;
+  artist: string;
+  album: string;
+  albumArt: string;
+  url?: string;
+  isPlaying: boolean;
+  progress: number; // ms
+  duration: number; // ms
+  source: MusicProvider;
+}
+
+export interface MusicTrack {
+  id: string;
+  title: string;
+  artist: string;
+  image: string;
+  url: string;
+}
+
+export type MusicProvider = "spotify" | "navidrome";
+
+export interface MusicDataResult {
+  provider: MusicProvider;
+  nowPlaying: NowPlaying | null;
+  topTracks: MusicTrack[];
+  loading: boolean;
+  error: string | null;
+}
+export interface MusicTopTracksResponse {
+  provider: MusicProvider;
+  tracks: MusicTrack[];
+}
+
