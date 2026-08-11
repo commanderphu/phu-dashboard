@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_BASE } from "@/lib/api";
 
 export interface SystemInfo {
   host: string;
@@ -19,7 +20,7 @@ export function useSystemInfo(intervalMs = 30_000) {
 
   async function fetchInfo() {
     try {
-      const res = await fetch("https://api.intern.phudevelopement.xyz/system");
+      const res = await fetch(`${API_BASE}/system`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json: SystemInfo = await res.json();
       setData(json);

@@ -10,7 +10,7 @@ PORT=5173
 NETWORK=core_network
 
 VITE_APP_TITLE="Phu’s Nerd Dashboard"
-VITE_API_URL=https://api.phudevelopment.xyz
+VITE_API_URL=https://api.intern.phudevelopement.xyz
 ```
 
 ---
@@ -37,7 +37,7 @@ Caddyfile-Snippet (zentraler Reverse Proxy):
 # ⚙️ Phu’s Nerd Dashboard (intern)
 # ======================================================
 
-dashboard.intern.phudevelopment.xyz {
+dashboard.intern.phudevelopement.xyz {
     reverse_proxy phu-dashboard:5173
 
     tls {

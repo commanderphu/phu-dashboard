@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import type { TwitchData, TwitchStatus } from "@/lib/types";
-
-const API_BASE = "https://api.intern.phudevelopement.xyz";
+import { API_BASE } from "@/lib/api";
 
 export function useTwitchStatus(intervalMs = 60_000): TwitchData {
   const [status, setStatus] = useState<TwitchStatus | null>(null);

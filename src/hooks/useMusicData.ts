@@ -6,8 +6,7 @@ import type {
   MusicTrack,
   MusicTopTracksResponse,
 } from "@/lib/types";
-
-const API_BASE = "https://api.intern.phudevelopement.xyz";
+import { API_BASE } from "@/lib/api";
 
 export function useMusicData(): MusicDataResult {
   const { provider } = useMusicProvider();

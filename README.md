@@ -16,7 +16,7 @@
 
 **Phu’s Nerd Dashboard** ist das persönliche Control Center innerhalb deines Homelabs —  
 entwickelt mit **React + Vite + Tailwind + TypeScript** und optimiert für  
-`dashboard.intern.phudevelopment.xyz`.
+`dashboard.intern.phudevelopement.xyz`.
 
 > Teil des PhuDevelopment-Ökosystems – modular, self-hosted, clean und nerdy.
 
@@ -54,7 +54,7 @@ docker compose up -d
 **Zugriff:**
 
 * 🔗 [http://localhost:5173](http://localhost:5173)
-* 🌐 [https://dashboard.intern.phudevelopment.xyz](https://dashboard.intern.phudevelopment.xyz) (intern)
+* 🌐 [https://dashboard.intern.phudevelopement.xyz](https://dashboard.intern.phudevelopement.xyz) (intern)
 
 ---
 
@@ -68,7 +68,7 @@ PORT=5173
 NETWORK=core_network
 
 VITE_APP_TITLE="Phu’s Nerd Dashboard"
-VITE_API_URL=https://api.phudevelopment.xyz
+VITE_API_URL=https://api.intern.phudevelopement.xyz
 ```
 
 ---
@@ -95,7 +95,7 @@ Caddyfile-Snippet (zentraler Reverse Proxy):
 # ⚙️ Phu’s Nerd Dashboard (intern)
 # ======================================================
 
-dashboard.intern.phudevelopment.xyz {
+dashboard.intern.phudevelopement.xyz {
     reverse_proxy phu-dashboard:5173
 
     tls {
