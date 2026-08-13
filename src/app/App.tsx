@@ -35,9 +35,10 @@ function AppContent() {
           weather.current != null
             ? { "/wetter": `${Math.round(weather.current)}°` }
             : {},
+        // Impressum und Datenschutz standen hier, ohne dass es die Routen je
+        // gab — beide landeten in der NotFound-Seite. Für ein privates
+        // Dashboard hinter internem DNS braucht es sie ohnehin nicht.
         footerLinks: [
-          { label: "Impressum", href: "/impressum" },
-          { label: "Datenschutz", href: "/datenschutz" },
           {
             label: "GitHub",
             href: "https://github.com/commanderphu",
