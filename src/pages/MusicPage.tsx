@@ -3,8 +3,14 @@ import { MusicProviderToggle } from "@/components/MusicProviderToggle";
 import { resolveApiUrl } from "@/lib/api";
 
 export default function MusicPage() {
-  const { nowPlaying, topTracks, loading, error } = useMusicData();
+  const { provider, nowPlaying, topTracks, loading, error } = useMusicData();
   const nowPlayingUrl = resolveApiUrl(nowPlaying?.url);
+
+  // Spotify liefert meistgehörte Titel, Navidrome häufig gehörte Alben —
+  // die Subsonic-API kennt nichts Titelgenaues. Also nicht beides gleich
+  // beschriften.
+  const listenTitel =
+    provider === "navidrome" ? "Häufig gehört" : "Top-Tracks";
 
   if (loading) {
     return <div className="text-muted">🎧 Lädt Musikdaten …</div>;
@@ -64,9 +70,7 @@ export default function MusicPage() {
       {/* TOP TRACKS */}
       {topTracks.length > 0 && (
         <section>
-          <h3 className="text-lg font-semibold mb-3">
-            Top-Tracks
-          </h3>
+          <h3 className="mb-3 text-lg font-semibold">{listenTitel}</h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {topTracks.map((track) => (
               <TopTrack key={track.id} track={track} />
