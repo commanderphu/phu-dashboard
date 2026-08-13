@@ -1,5 +1,5 @@
 // src/app/App.tsx
-import { Suspense,useState} from "react";
+import { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { routes, toDockItems } from "@/routes";
@@ -23,14 +23,10 @@ function RouteFallback() {
 function AppContent() {
   useScrollTop();
   useRouteTitle();
-  const [user, setUser] = useState<{ name: string } | null>(null);
   const weather = useWeather();
 
   return (
     <Layout
-        user={user}
-        onLogin={() => setUser({ name: "Joshua Phu" })}
-        onLogout={() => setUser(null)}
       dockProps={{
         items: toDockItems(),
         maxVisible: 3,

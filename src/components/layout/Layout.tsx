@@ -10,15 +10,12 @@ import DockNav from "@/components/DockNav";
 type LayoutProps = {
   children: ReactNode;
   dockProps: React.ComponentProps<typeof DockNav>;
-  user?: { name: string } | null;
-  onLogin?: () => void;
-  onLogout?: () => void;
 };
 
-export function Layout({ children, dockProps, user,onLogin, onLogout }: LayoutProps) {
+export function Layout({ children, dockProps }: LayoutProps) {
   return (
     <div className="min-h-screen bg-bg text-fg">
-      <Header user={user} onLogin={onLogin} onLogout={onLogout}  />
+      <Header />
 
       <div className="mx-auto max-w-7xl px-4 py-4">
         <main className="flex flex-col gap-4">
