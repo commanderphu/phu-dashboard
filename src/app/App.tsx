@@ -29,7 +29,7 @@ function AppContent() {
     <Layout
       dockProps={{
         items: toDockItems(),
-        maxVisible: 3,
+        maxVisible: 4,
         badges:
           weather.current != null
             ? { "/wetter": `${Math.round(weather.current)}°` }
