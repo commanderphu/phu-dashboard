@@ -8,6 +8,8 @@ interface WidgetCardProps {
   className?: string;
   children: React.ReactNode;
   collapsible?: boolean;
+  /** Zustand beim ersten Aufruf, danach entscheidet der localStorage. */
+  defaultCollapsed?: boolean;
 }
 
 export function WidgetCard({
@@ -16,7 +18,10 @@ export function WidgetCard({
   className = "",
   children,
   collapsible = false,
+  defaultCollapsed = false,
 }: WidgetCardProps) {
+  // Achtung: Der Titel darf nichts Veränderliches enthalten (z. B. eine
+  // Trefferzahl) — sonst wechselt der Schlüssel und der Zustand geht verloren.
   const slug = title
     .toLowerCase()
     .replace(/[\s–]+/g, "-")
@@ -24,7 +29,7 @@ export function WidgetCard({
 
   const [collapsed, setCollapsed] = useLocalStorage<boolean>(
     `phu:widget:collapsed:${slug}`,
-    false
+    defaultCollapsed
   );
 
   return (
