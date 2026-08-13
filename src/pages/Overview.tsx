@@ -9,10 +9,11 @@ import { SystemMonitor } from "@/components/widgets/SystemMonitor";
 import { MusicPlayerWidget } from "@/components/widgets/MusicPlayerWidget";
 import { TwitchWidget } from "@/components/widgets/TwitchWidget";
 import { useMusicData } from "@/hooks/useMusicData";
-import { useSystemInfo } from "@/hooks/useSystemInfo";
 import { useTwitchStatus } from "@/hooks/useTwitchStatus";
 import { getDailyGreeting } from "@/lib/dailyGreeting";
 
+// [0] dient als Startwert, sobald etwas gewählt wurde kommt der Wert aus dem
+// localStorage (siehe storageKey unten).
 const MOOD_OPTIONS = [
   "⚡ fokussiert",
   "🔥 produktiv",
@@ -35,7 +36,6 @@ function useClock(): Date {
 
 export function Overview({ weather }: { weather: Weather }) {
   const { nowPlaying, loading: musicLoading } = useMusicData();
-  const { data: sysInfo } = useSystemInfo();
   const twitchData = useTwitchStatus();
   const [greeting] = useState(() => getDailyGreeting());
   const now = useClock();
@@ -45,24 +45,6 @@ export function Overview({ weather }: { weather: Weather }) {
     day: "numeric",
     month: "long",
   }) + " · " + now.toLocaleTimeString("de-DE");
-
-  const musikValue = musicLoading
-    ? "…"
-    : nowPlaying
-      ? `${nowPlaying.isPlaying ? "🎧" : "⏸"} ${nowPlaying.artist} – ${nowPlaying.title}`
-      : "⏸ nichts";
-
-  const twitchValue = twitchData.loading
-    ? "…"
-    : twitchData.status?.online
-      ? `🔴 LIVE · ${twitchData.status.viewerCount?.toLocaleString("de-DE") ?? "?"} Viewer`
-      : "⚫ Offline";
-
-  const followerValue = twitchData.loading
-    ? "…"
-    : twitchData.followerCount != null
-      ? `👥 ${twitchData.followerCount.toLocaleString("de-DE")}`
-      : "–";
 
   // Festes Layout, auf 5 Spalten durchgerechnet: jede Zeile ergibt exakt 5.
   // Wer hier etwas verschiebt oder ergänzt, muss die Zeilensumme wieder auf 5
@@ -125,20 +107,20 @@ export function Overview({ weather }: { weather: Weather }) {
 
   return (
     <>
-      {/* Erste Zeile: Systemdaten */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-6">
-        <StatCard label="Heute" value={greeting} subtitle={clockSubtitle} />
-        <StatCard
-          label="Laune"
-          value="⚡ fokussiert"
-          editable
-          storageKey="phu:statcard:laune"
-          options={MOOD_OPTIONS}
-        />
-        <StatCard label="Musik" value={musikValue} to="/musik" />
-        <StatCard label="System" value={sysInfo ? `🖥 ${sysInfo.host}` : "…"} />
-        <StatCard label="Twitch" value={twitchValue} to="https://twitch.tv/commanderphu" />
-        <StatCard label="Follower" value={followerValue} />
+      {/* Begrüßungszeile — nur was in keinem Widget darunter steht */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
+        <div className="lg:col-span-3">
+          <StatCard label="Heute" value={greeting} subtitle={clockSubtitle} />
+        </div>
+        <div className="lg:col-span-2">
+          <StatCard
+            label="Laune"
+            value={MOOD_OPTIONS[0]}
+            editable
+            storageKey="phu:statcard:laune"
+            options={MOOD_OPTIONS}
+          />
+        </div>
       </div>
 
       {/* Widget-Raster */}
