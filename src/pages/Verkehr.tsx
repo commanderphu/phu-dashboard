@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { AlertTriangle, Ban, Clock, Cone, RefreshCw } from "lucide-react";
 import { WidgetCard } from "@/ui/WidgetCard";
+import { Pagination } from "@/ui/Pagination";
 import { useTraffic } from "@/hooks/useTraffic";
 import { ROADS, DEFAULT_RADIUS_KM } from "@/lib/autobahn";
 import type { TrafficItem } from "@/lib/autobahn";
@@ -58,6 +60,7 @@ function Abschnitt({
   tone,
   collapsible = false,
   defaultCollapsed = false,
+  pageSize = 4,
   leerText,
 }: {
   title: string;
@@ -66,8 +69,17 @@ function Abschnitt({
   tone: "warn" | "block" | "work";
   collapsible?: boolean;
   defaultCollapsed?: boolean;
+  pageSize?: number;
   leerText: string;
 }) {
+  const [page, setPage] = useState(1);
+
+  const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
+  // Nach einer Aktualisierung kann die Liste kürzer sein als vorher — dann
+  // zeigt die gemerkte Seite ins Leere.
+  const safePage = Math.min(page, pageCount);
+  const sichtbar = items.slice((safePage - 1) * pageSize, safePage * pageSize);
+
   return (
     <WidgetCard
       // Titel bleibt konstant — die Zahl gehört in den Hinweis, sonst wechselt
@@ -83,11 +95,14 @@ function Abschnitt({
           {leerText}
         </p>
       ) : (
-        <ul className="flex flex-col">
-          {items.map((item) => (
-            <Meldung key={item.id} item={item} tone={tone} />
-          ))}
-        </ul>
+        <>
+          <ul className="flex flex-col">
+            {sichtbar.map((item) => (
+              <Meldung key={item.id} item={item} tone={tone} />
+            ))}
+          </ul>
+          <Pagination page={safePage} pageCount={pageCount} onChange={setPage} />
+        </>
       )}
     </WidgetCard>
   );
