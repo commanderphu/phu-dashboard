@@ -1,43 +1,24 @@
-import { useEffect, useState } from "react";
+import { createContext, useContext } from "react";
 import type { MusicProvider } from "@/lib/types";
 
-const DEFAULT_PROVIDER: MusicProvider = "spotify";
+export interface MusicProviderState {
+  provider: MusicProvider;
+  loading: boolean;
+  error: string | null;
+  toggleProvider: (next: MusicProvider) => Promise<void>;
+}
 
-export function useMusicProvider() {
-  const [provider, setProvider] = useState<MusicProvider>(DEFAULT_PROVIDER);
-  const [loading, setLoading] = useState(false);
+// Ein gemeinsamer Zustand für alle Verbraucher. Vorher rief jeder Aufrufer
+// den Hook einzeln auf und bekam eine eigene Kopie — der Umschalter wusste
+// dann nichts vom Datenhook und umgekehrt.
+export const MusicProviderCtx = createContext<MusicProviderState | null>(null);
 
-  async function fetchProvider() {
-    try {
-      const res = await fetch("/music/provider");
-      const data = await res.json();
-
-      if (data.provider === "spotify" || data.provider === "navidrome") {
-        setProvider(data.provider);
-      }
-    } catch {
-      // Fallback bleibt DEFAULT_PROVIDER
-    }
+export function useMusicProvider(): MusicProviderState {
+  const ctx = useContext(MusicProviderCtx);
+  if (!ctx) {
+    throw new Error(
+      "useMusicProvider muss innerhalb von <MusicProviderProvider> stehen"
+    );
   }
-
-  async function toggleProvider(next: MusicProvider) {
-    setLoading(true);
-    await fetch("/music/provider", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ provider: next }),
-    });
-    setProvider(next);
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    fetchProvider();
-  }, []);
-
-  return {
-    provider,   // ✅ NIE null
-    loading,
-    toggleProvider,
-  };
+  return ctx;
 }

@@ -8,7 +8,7 @@ import type {
 } from "@/lib/types";
 import { API_BASE } from "@/lib/api";
 
-export function useMusicData(): MusicDataResult {
+export function useMusicData(intervalMs = 20_000): MusicDataResult {
   const { provider } = useMusicProvider();
 
   const [nowPlaying, setNowPlaying] = useState<NowPlaying | null>(null);
@@ -18,10 +18,13 @@ export function useMusicData(): MusicDataResult {
 
   useEffect(() => {
     let alive = true;
+    // Nur der erste Abruf zeigt "Lädt…" — sonst flackerte die Seite bei
+    // jedem Intervall zurück auf den Ladezustand.
+    let erstAbruf = true;
 
     async function fetchMusic() {
       try {
-        setLoading(true);
+        if (erstAbruf) setLoading(true);
         setError(null);
 
         const [npRes, ttRes] = await Promise.all([
@@ -41,7 +44,8 @@ export function useMusicData(): MusicDataResult {
         const nowPlayingData: NowPlaying | null = npJson?.now ?? null;
         setNowPlaying(nowPlayingData);
         setTopTracks(topTracksData.tracks);
-        // provider kommt weiter aus useMusicProvider (Single Source of Truth)
+        // Der Provider kommt aus dem gemeinsamen Context, nicht aus dieser
+        // Antwort — sonst gäbe es zwei Wahrheiten.
       } catch (e) {
         if (!alive) return;
         setError(
@@ -51,14 +55,17 @@ export function useMusicData(): MusicDataResult {
         );
       } finally {
         if (alive) setLoading(false);
+        erstAbruf = false;
       }
     }
 
     fetchMusic();
+    const id = setInterval(fetchMusic, intervalMs);
     return () => {
       alive = false;
+      clearInterval(id);
     };
-  }, [provider]);
+  }, [provider, intervalMs]);
 
   return {
     provider,

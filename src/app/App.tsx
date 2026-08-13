@@ -8,6 +8,7 @@ import NotFound from "@/pages/NotFound.tsx";
 import { useScrollTop } from "@/hooks/useScrollTop";
 import { useRouteTitle } from "@/hooks/useRouteTitle";
 import { useWeather } from "@/hooks/useWeather";
+import { MusicProviderProvider } from "@/components/MusicProviderProvider";
 
 function RouteFallback() {
   return (
@@ -79,7 +80,11 @@ function AppContent() {
 export default function App() {
   return (
     <Router>
-      <AppContent />
+      {/* Provider-Zustand einmal für die gesamte App — Umschalter und
+          Datenhook teilen sich denselben Wert. */}
+      <MusicProviderProvider>
+        <AppContent />
+      </MusicProviderProvider>
     </Router>
   );
 }

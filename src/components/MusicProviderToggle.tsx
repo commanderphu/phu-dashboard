@@ -2,7 +2,7 @@ import { Music2, Radio } from "lucide-react";
 import { useMusicProvider } from "@/hooks/useMusicProvider";
 
 export function MusicProviderToggle() {
-  const { provider, toggleProvider, loading } = useMusicProvider();
+  const { provider, toggleProvider, loading, error } = useMusicProvider();
 
   return (
     <button
@@ -10,10 +10,16 @@ export function MusicProviderToggle() {
         toggleProvider(provider === "spotify" ? "navidrome" : "spotify")
       }
       disabled={loading}
-      className="flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-2
-                 text-sm text-fg transition-colors
-                 hover:border-ok/50 hover:bg-elev"
-      title="Music Provider wechseln"
+      className={`flex items-center gap-2 rounded-md border bg-surface px-3 py-2
+                 text-sm text-fg transition-colors hover:bg-elev
+                 disabled:opacity-60 ${
+                   error ? "border-danger/50" : "border-border hover:border-ok/50"
+                 }`}
+      title={
+        error
+          ? `Provider-Wechsel fehlgeschlagen: ${error}`
+          : "Music Provider wechseln"
+      }
     >
       {provider === "spotify" ? (
         <>

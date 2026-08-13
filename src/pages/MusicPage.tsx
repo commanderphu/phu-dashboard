@@ -1,46 +1,30 @@
 import { useMusicData } from "@/hooks/useMusicData";
-import {MusicProviderToggle} from "@/components/MusicProviderToggle";
+import { MusicProviderToggle } from "@/components/MusicProviderToggle";
 
 export default function MusicPage() {
-  const {
-    provider,
-    nowPlaying,
-    topTracks,
-    loading,
-    error,
-  } = useMusicData();
+  const { nowPlaying, topTracks, loading, error } = useMusicData();
 
   if (loading) {
-    return (
-      <div className="p-8 text-muted">
-        🎧 Lädt Musikdaten …
-      </div>
-    );
+    return <div className="text-muted">🎧 Lädt Musikdaten …</div>;
   }
 
   if (error) {
     return (
-      <div className="p-8 text-danger">
-        Fehler: {error}
-      </div>
+      <p className="rounded-xl border border-danger/30 bg-danger/10 p-3 text-sm text-danger">
+        ⚠ Musikdaten nicht verfügbar: {error}
+      </p>
     );
   }
 
   return (
-    <div className="p-8 space-y-8">
+    // Kein eigenes p-8 — das Layout setzt die Seitenränder bereits.
+    <div className="space-y-8">
       {/* HEADER */}
       <header className="flex items-center gap-3">
-        <h1 className="text-2xl font-bold">🎵 Musik</h1>
-         <MusicProviderToggle />
-        <span
-          className={`text-xs px-2 py-1 rounded-full ${
-            provider === "spotify"
-              ? "bg-success/10 text-success"
-              : "bg-ok/10 text-ok-bright"
-          }`}
-        >
-          {provider}
-        </span>
+        <h1 className="text-2xl font-semibold tracking-tight">Musik</h1>
+        {/* Der Umschalter zeigt den Provider bereits an — kein zweites
+            Abzeichen daneben. */}
+        <MusicProviderToggle />
       </header>
 
       {/* NOW PLAYING */}
