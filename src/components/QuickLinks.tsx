@@ -6,7 +6,7 @@ export function QuickLinks() {
     { name: "GitHub", url: "https://github.com/commanderphu" },
   ];
   return (
-    <ul className="grid grid-cols-2 gap-2 text-sm">
+    <ul className="grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
       {links.map((x) => (
         <li key={x.name}>
           <a

@@ -29,7 +29,7 @@ export function WidgetCard({
 
   return (
     <section
-      className={`rounded-2xl border border-border bg-surface p-4 shadow-[var(--shadow-sm)] transition-shadow duration-200 hover:shadow-[var(--shadow-md)] ${className}`}
+      className={`flex min-w-0 flex-1 flex-col rounded-2xl border border-border bg-surface p-4 shadow-[var(--shadow-sm)] transition-shadow duration-200 hover:shadow-[var(--shadow-md)] ${className}`}
     >
       <div
         className={`mb-3 flex items-baseline justify-between ${collapsible ? "cursor-pointer select-none" : ""}`}
@@ -47,7 +47,7 @@ export function WidgetCard({
       </div>
       <div
         className={`grid transition-all duration-300 ease-in-out ${
-          collapsed ? "grid-rows-[0fr] opacity-0" : "grid-rows-[1fr] opacity-100"
+          collapsed ? "grid-rows-[0fr] opacity-0" : "flex-1 grid-rows-[1fr] opacity-100"
         }`}
       >
         <div className="overflow-hidden">{children}</div>
