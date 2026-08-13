@@ -1,9 +1,38 @@
 import type { JSX } from "react";
 
 /* ========= 🌦 Wetter ========= */
+export type WeatherDay = {
+  day: string;
+  /** Tageshöchstwert — heißt aus Kompatibilität weiterhin temp. */
+  temp: number;
+  tempMin: number;
+  desc: string;
+  code: number;
+  /** Niederschlagsmenge in mm */
+  rain: number;
+  /** Niederschlagswahrscheinlichkeit in Prozent */
+  rainChance: number;
+  windMax: number;
+  sunrise: string;
+  sunset: string;
+};
+
+export type WeatherNow = {
+  temp: number;
+  feelsLike: number;
+  humidity: number;
+  wind: number;
+  code: number;
+  isDay: boolean;
+};
+
 export type Weather = {
+  /** Aktuelle Temperatur — von Dock-Badge und Übersicht genutzt. */
   current: number | null;
-  daily: { day: string; temp: number; desc: string }[];
+  daily: WeatherDay[];
+  now: WeatherNow | null;
+  error: string | null;
+  loading: boolean;
 };
 
 /* ========= 🧭 Navigation ========= */
