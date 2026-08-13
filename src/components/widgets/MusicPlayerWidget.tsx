@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { WidgetCard } from "@/ui/WidgetCard";
+import { resolveApiUrl } from "@/lib/api";
 import type { NowPlaying } from "@/lib/types";
 
 function formatMs(ms: number): string {
@@ -56,9 +57,9 @@ export function MusicPlayerWidget({ nowPlaying, loading }: MusicPlayerWidgetProp
         <div className="flex flex-col gap-3">
           {/* Cover + Info */}
           <div className="flex items-center gap-3">
-            {nowPlaying.albumArt ? (
+            {resolveApiUrl(nowPlaying.albumArt) ? (
               <img
-                src={nowPlaying.albumArt}
+                src={resolveApiUrl(nowPlaying.albumArt) ?? undefined}
                 alt={nowPlaying.album}
                 className="h-16 w-16 rounded-xl object-cover shrink-0"
               />

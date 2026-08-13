@@ -1,8 +1,10 @@
 import { useMusicData } from "@/hooks/useMusicData";
 import { MusicProviderToggle } from "@/components/MusicProviderToggle";
+import { resolveApiUrl } from "@/lib/api";
 
 export default function MusicPage() {
   const { nowPlaying, topTracks, loading, error } = useMusicData();
+  const nowPlayingUrl = resolveApiUrl(nowPlaying?.url);
 
   if (loading) {
     return <div className="text-muted">🎧 Lädt Musikdaten …</div>;
@@ -29,9 +31,9 @@ export default function MusicPage() {
 
       {/* NOW PLAYING */}
       {nowPlaying ? (
-        nowPlaying.url ? (
+        nowPlayingUrl ? (
           <a
-            href={nowPlaying.url}
+            href={nowPlayingUrl}
             target="_blank"
             rel="noopener noreferrer"
             className={`flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 ${
@@ -67,32 +69,62 @@ export default function MusicPage() {
           </h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {topTracks.map((track) => (
-              <a
-                key={track.id}
-                href={track.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 p-3 bg-surface border border-border rounded-xl hover:bg-elev transition-colors"
-              >
-                <img
-                  src={track.image}
-                  alt={track.title}
-                  className="w-12 h-12 rounded-md object-cover"
-                />
-                <div className="min-w-0">
-                  <p className="font-medium truncate">
-                    {track.title}
-                  </p>
-                  <p className="text-xs text-muted truncate">
-                    {track.artist}
-                  </p>
-                </div>
-              </a>
+              <TopTrack key={track.id} track={track} />
             ))}
           </div>
         </section>
       )}
     </div>
+  );
+}
+
+/* =========================================================
+   🎵 Sub-Component: Top-Track
+   ========================================================= */
+
+function TopTrack({
+  track,
+}: {
+  track: ReturnType<typeof useMusicData>["topTracks"][number];
+}) {
+  const cover = resolveApiUrl(track.image);
+  const href = resolveApiUrl(track.url);
+
+  const inhalt = (
+    <>
+      {cover ? (
+        <img
+          src={cover}
+          alt={track.title}
+          className="h-12 w-12 shrink-0 rounded-md object-cover"
+        />
+      ) : (
+        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-elev">
+          🎵
+        </div>
+      )}
+      <div className="min-w-0">
+        <p className="truncate font-medium">{track.title}</p>
+        <p className="truncate text-xs text-muted">{track.artist}</p>
+      </div>
+    </>
+  );
+
+  const klassen =
+    "flex items-center gap-3 rounded-xl border border-border bg-surface p-3 transition-colors";
+
+  // Ohne brauchbare Ziel-URL kein Link — sonst führt der Klick ins Leere.
+  return href ? (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`${klassen} hover:bg-elev`}
+    >
+      {inhalt}
+    </a>
+  ) : (
+    <div className={klassen}>{inhalt}</div>
   );
 }
 
@@ -105,8 +137,9 @@ function NowPlayingContent({
 }: {
   nowPlaying: NonNullable<ReturnType<typeof useMusicData>["nowPlaying"]>;
 }) {
-  const showProgress =
-    nowPlaying.isPlaying && nowPlaying.duration > 0;
+  const showProgress = nowPlaying.isPlaying && nowPlaying.duration > 0;
+  // Navidrome liefert relative Cover-Pfade, Spotify absolute.
+  const cover = resolveApiUrl(nowPlaying.albumArt);
 
   return (
     <>
@@ -120,11 +153,17 @@ function NowPlayingContent({
       )}
 
       {/* COVER */}
-      <img
-        src={nowPlaying.albumArt}
-        alt={nowPlaying.title}
-        className="w-16 h-16 rounded-xl shadow-md object-cover"
-      />
+      {cover ? (
+        <img
+          src={cover}
+          alt={nowPlaying.title}
+          className="w-16 h-16 rounded-xl shadow-md object-cover shrink-0"
+        />
+      ) : (
+        <div className="grid h-16 w-16 shrink-0 place-items-center rounded-xl bg-elev text-2xl">
+          🎵
+        </div>
+      )}
 
       {/* META */}
       <div className="flex-1 min-w-0">
