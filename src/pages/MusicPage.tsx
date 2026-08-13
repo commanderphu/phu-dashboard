@@ -12,7 +12,7 @@ export default function MusicPage() {
 
   if (loading) {
     return (
-      <div className="p-8 text-muted-foreground">
+      <div className="p-8 text-muted">
         🎧 Lädt Musikdaten …
       </div>
     );
@@ -20,7 +20,7 @@ export default function MusicPage() {
 
   if (error) {
     return (
-      <div className="p-8 text-red-500">
+      <div className="p-8 text-danger">
         Fehler: {error}
       </div>
     );
@@ -35,8 +35,8 @@ export default function MusicPage() {
         <span
           className={`text-xs px-2 py-1 rounded-full ${
             provider === "spotify"
-              ? "bg-green-500/10 text-green-400"
-              : "bg-orange-500/10 text-orange-400"
+              ? "bg-success/10 text-success"
+              : "bg-ok/10 text-ok-bright"
           }`}
         >
           {provider}
@@ -52,8 +52,8 @@ export default function MusicPage() {
             rel="noopener noreferrer"
             className={`flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 ${
               nowPlaying.isPlaying
-                ? "bg-green-500/10 ring-1 ring-green-400/30"
-                : "bg-muted/30 hover:bg-muted/50"
+                ? "bg-success/10 ring-1 ring-success/30"
+                : "bg-elev/60 hover:bg-elev"
             }`}
           >
             <NowPlayingContent nowPlaying={nowPlaying} />
@@ -62,15 +62,15 @@ export default function MusicPage() {
           <div
             className={`flex items-center gap-4 p-4 rounded-2xl ${
               nowPlaying.isPlaying
-                ? "bg-orange-500/10 ring-1 ring-orange-400/30"
-                : "bg-muted/30"
+                ? "bg-ok/10 ring-1 ring-ok/30"
+                : "bg-elev/60"
             }`}
           >
             <NowPlayingContent nowPlaying={nowPlaying} />
           </div>
         )
       ) : (
-        <p className="text-muted-foreground">
+        <p className="text-muted">
           Keine Wiedergabe aktiv.
         </p>
       )}
@@ -88,7 +88,7 @@ export default function MusicPage() {
                 href={track.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 p-3 bg-card rounded-xl hover:bg-card/80 transition"
+                className="flex items-center gap-3 p-3 bg-surface border border-border rounded-xl hover:bg-elev transition-colors"
               >
                 <img
                   src={track.image}
@@ -99,7 +99,7 @@ export default function MusicPage() {
                   <p className="font-medium truncate">
                     {track.title}
                   </p>
-                  <p className="text-xs text-muted-foreground truncate">
+                  <p className="text-xs text-muted truncate">
                     {track.artist}
                   </p>
                 </div>
@@ -129,9 +129,9 @@ function NowPlayingContent({
       {/* VISUALIZER */}
       {nowPlaying.isPlaying && (
         <div className="flex flex-col justify-center items-center w-4 h-16 mr-1">
-          <span className="w-[3px] bg-green-400/90 rounded-sm animate-[bar1_1s_ease-in-out_infinite]" />
-          <span className="w-[3px] bg-green-400/70 rounded-sm animate-[bar2_1.3s_ease-in-out_infinite]" />
-          <span className="w-[3px] bg-green-400/60 rounded-sm animate-[bar3_1.1s_ease-in-out_infinite]" />
+          <span className="w-[3px] bg-success/90 rounded-sm animate-[bar1_1s_ease-in-out_infinite]" />
+          <span className="w-[3px] bg-success/70 rounded-sm animate-[bar2_1.3s_ease-in-out_infinite]" />
+          <span className="w-[3px] bg-success/60 rounded-sm animate-[bar3_1.1s_ease-in-out_infinite]" />
         </div>
       )}
 
@@ -147,15 +147,15 @@ function NowPlayingContent({
         <h2 className="font-semibold truncate">
           {nowPlaying.title}
         </h2>
-        <p className="text-sm text-muted-foreground truncate">
+        <p className="text-sm text-muted truncate">
           {nowPlaying.artist} — {nowPlaying.album}
         </p>
 
         {/* PROGRESS */}
         {showProgress && (
-          <div className="mt-2 w-full h-1.5 bg-muted rounded-full overflow-hidden">
+          <div className="mt-2 w-full h-1.5 bg-elev rounded-full overflow-hidden">
             <div
-              className="h-full bg-green-400 rounded-full transition-all duration-500 ease-linear"
+              className="h-full bg-success rounded-full transition-all duration-500 ease-linear"
               style={{
                 width: `${(nowPlaying.progress / nowPlaying.duration) * 100}%`,
               }}

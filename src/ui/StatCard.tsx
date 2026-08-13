@@ -51,7 +51,8 @@ export function StatCard({
     if (e.key === "Escape") cancelEdit();
   }
 
-  const baseClasses = "rounded-2xl border border-border bg-surface p-4";
+  const baseClasses =
+    "rounded-2xl border border-border bg-surface p-4 shadow-[var(--shadow-sm)] transition-[box-shadow,border-color] duration-200 hover:shadow-[var(--shadow-md)]";
 
   if (editable) {
     return (

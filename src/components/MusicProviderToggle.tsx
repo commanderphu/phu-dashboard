@@ -10,19 +10,19 @@ export function MusicProviderToggle() {
         toggleProvider(provider === "spotify" ? "navidrome" : "spotify")
       }
       disabled={loading}
-      className="flex items-center gap-2 px-3 py-2 rounded-md
-                 bg-white/5 hover:bg-white/10 transition
-                 text-sm text-white"
+      className="flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-2
+                 text-sm text-fg transition-colors
+                 hover:border-ok/50 hover:bg-elev"
       title="Music Provider wechseln"
     >
       {provider === "spotify" ? (
         <>
-          <Music2 className="w-4 h-4 text-green-400" />
+          <Music2 className="w-4 h-4 text-success" />
           Spotify
         </>
       ) : (
         <>
-          <Radio className="w-4 h-4 text-orange-400" />
+          <Radio className="w-4 h-4 text-ok-bright" />
           Navidrome
         </>
       )}

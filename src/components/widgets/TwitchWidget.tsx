@@ -12,7 +12,7 @@ export function TwitchWidget({ data }: TwitchWidgetProps) {
     <WidgetCard title="Twitch" hint="commanderphu" collapsible>
       {loading && <p className="text-sm text-muted">Lädt…</p>}
 
-      {error && <p className="text-xs text-red-400">⚠ {error}</p>}
+      {error && <p className="text-xs text-danger">⚠ {error}</p>}
 
       {!loading && !error && (
         <div className="flex flex-col gap-3">
@@ -23,7 +23,7 @@ export function TwitchWidget({ data }: TwitchWidgetProps) {
                 src={status.user.avatar}
                 alt={status.user.display_name}
                 className={`h-12 w-12 rounded-full object-cover ring-2 ${
-                  status.online ? "ring-red-500" : "ring-border"
+                  status.online ? "ring-danger" : "ring-border"
                 }`}
               />
             ) : (
@@ -43,8 +43,8 @@ export function TwitchWidget({ data }: TwitchWidgetProps) {
 
               {/* Live-Status */}
               {status?.online ? (
-                <div className="flex items-center gap-1.5 text-sm text-red-400">
-                  <span className="inline-block h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+                <div className="flex items-center gap-1.5 text-sm text-danger">
+                  <span className="inline-block h-2 w-2 rounded-full bg-danger animate-pulse" />
                   LIVE · {status.viewerCount?.toLocaleString("de-DE") ?? "?"} Viewer
                 </div>
               ) : (

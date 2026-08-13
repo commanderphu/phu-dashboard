@@ -3,7 +3,7 @@ import { useSystemInfo } from "@/hooks/useSystemInfo";
 import { Cpu, MemoryStick, Clock, Server, RefreshCw } from "lucide-react";
 
 function Bar({ value }: { value: number }) {
-  const color = value > 80 ? "bg-red-500" : value > 60 ? "bg-yellow-400" : "bg-ok";
+  const color = value > 80 ? "bg-danger" : value > 60 ? "bg-ok" : "bg-success";
   return (
     <div className="h-1.5 w-full rounded-full bg-border mt-1">
       <div className={`h-1.5 rounded-full ${color} transition-all duration-500`} style={{ width: `${value}%` }} />
@@ -25,7 +25,7 @@ export function SystemMonitor() {
       </button>
 
       {error && (
-        <p className="text-xs text-red-400">⚠ {error}</p>
+        <p className="text-xs text-danger">⚠ {error}</p>
       )}
 
       {!data && !error && (

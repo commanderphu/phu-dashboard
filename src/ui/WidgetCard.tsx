@@ -28,7 +28,9 @@ export function WidgetCard({
   );
 
   return (
-    <section className={`rounded-2xl border border-border bg-elev p-4 ${className}`}>
+    <section
+      className={`rounded-2xl border border-border bg-surface p-4 shadow-[var(--shadow-sm)] transition-shadow duration-200 hover:shadow-[var(--shadow-md)] ${className}`}
+    >
       <div
         className={`mb-3 flex items-baseline justify-between ${collapsible ? "cursor-pointer select-none" : ""}`}
         onClick={collapsible ? () => setCollapsed(!collapsed) : undefined}
