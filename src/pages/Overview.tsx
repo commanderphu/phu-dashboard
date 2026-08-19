@@ -10,6 +10,7 @@ import { MusicPlayerWidget } from "@/components/widgets/MusicPlayerWidget";
 import { TwitchWidget } from "@/components/widgets/TwitchWidget";
 import { LiveFollowsWidget } from "@/components/widgets/LiveFollowsWidget";
 import { PriceWatchWidget } from "@/components/widgets/PriceWatchWidget";
+import { TodayWidget } from "@/components/widgets/TodayWidget";
 import { useMusicData } from "@/hooks/useMusicData";
 import { useTwitchStatus } from "@/hooks/useTwitchStatus";
 import { getDailyGreeting } from "@/lib/dailyGreeting";
@@ -97,9 +98,9 @@ export function Overview({ weather }: { weather: Weather }) {
 
     // Zeile 3 — 2 + 3
     {
-      id: "live",
+      id: "heute",
       colSpan: "lg:col-span-2",
-      node: <LiveFollowsWidget />,
+      node: <TodayWidget />,
     },
     {
       id: "preise",
@@ -107,10 +108,15 @@ export function Overview({ weather }: { weather: Weather }) {
       node: <PriceWatchWidget />,
     },
 
-    // Zeile 4 — 5
+    // Zeile 4 — 2 + 3
+    {
+      id: "live",
+      colSpan: "lg:col-span-2",
+      node: <LiveFollowsWidget />,
+    },
     {
       id: "schnellzugriff",
-      colSpan: "lg:col-span-5",
+      colSpan: "lg:col-span-3",
       node: (
         <WidgetCard title="Schnellzugriff" hint="dein Kram, deine Ordnung" collapsible>
           <QuickLinks />
