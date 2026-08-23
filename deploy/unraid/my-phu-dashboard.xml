@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>phu-dashboard</Name>
+  <Repository>phu-dashboard:prod</Repository>
+  <Registry/>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support/>
+  <Project>https://github.com/commanderphu/phu-dashboard</Project>
+  <Overview>Persoenliches Control Center im Homelab. Statisches Artefakt ueber nginx (Produktionsabbild, kein Dev-Server).&#xD;
+&#xD;
+Die Adresse des phu-api-hub wird beim Start aus der Variable API_URL in eine config.js geschrieben — dasselbe Abbild laeuft dadurch in jeder Umgebung.&#xD;
+&#xD;
+Hinweis: Die API-Aufrufe macht der Browser des Betrachters, nicht dieser Container. Die Adresse muss also von dort aus erreichbar sein.</Overview>
+  <Category>Productivity: HomeAutomation:</Category>
+  <WebUI>http://[IP]:[PORT:80]</WebUI>
+  <TemplateURL/>
+  <Icon>https://raw.githubusercontent.com/commanderphu/phu-dashboard/main/src/assets/header.webp</Icon>
+  <ExtraParams>--restart=unless-stopped</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled></DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Config Name="WebUI Port" Target="80" Default="8080" Mode="tcp" Description="Port, unter dem das Dashboard erreichbar ist" Type="Port" Display="always" Required="true" Mask="false">8080</Config>
+  <Config Name="API URL" Target="API_URL" Default="https://api.intern.phudevelopement.xyz" Mode="" Description="Adresse des phu-api-hub. Wird beim Start in config.js geschrieben. Leer lassen heisst: der beim Bauen eingebackene Wert gilt." Type="Variable" Display="always" Required="false" Mask="false">https://api.intern.phudevelopement.xyz</Config>
+</Container>
