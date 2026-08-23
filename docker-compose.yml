@@ -16,6 +16,26 @@ services:
     networks:
       - core_network
 
+  # Produktionsvariante: statisches Artefakt über nginx, kein Vite zur Laufzeit.
+  # Startet nicht automatisch mit — bewusst über das Profil:
+  #   docker compose --profile prod up -d phu-dashboard-prod
+  phu-dashboard-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    image: phu-dashboard:prod
+    container_name: phu-dashboard-prod
+    restart: unless-stopped
+    profiles: ["prod"]
+    ports:
+      - "8080:80"
+    environment:
+      # Wird beim Start in config.js geschrieben. Leer lassen heißt: der beim
+      # Bauen eingebackene Rückfallwert gilt.
+      - API_URL=https://api.intern.phudevelopement.xyz
+    networks:
+      - core_network
+
 networks:
   core_network:
     external: true

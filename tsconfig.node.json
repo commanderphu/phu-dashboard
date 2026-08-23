@@ -29,7 +29,11 @@
     "noUncheckedSideEffectImports": true,
 
     /* Node-Typen für vite.config.ts, Scripts, etc. */
-    "types": ["node"]
+    // "types": ["node"] entfernt: @types/node war nie installiert und wird
+    // hier auch nicht gebraucht (vite.config.ts nutzt keine Node-APIs,
+    // scripts/ ist leer). Der Eintrag ließ "tsc -b" und damit den
+    // Produktionsbau scheitern. Wer hier Node-APIs verwendet, muss
+    // @types/node als devDependency ergänzen und die Zeile reaktivieren.
   },
   "include": [
     "vite.config.ts",

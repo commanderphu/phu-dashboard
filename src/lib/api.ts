@@ -1,5 +1,24 @@
-export const API_BASE =
-  import.meta.env.VITE_API_URL ?? "https://api.intern.phudevelopement.xyz";
+declare global {
+  interface Window {
+    /** Wird im Produktionsabbild beim Containerstart aus API_URL erzeugt. */
+    __APP_CONFIG__?: { apiUrl?: string };
+  }
+}
+
+const FALLBACK = "https://api.intern.phudevelopement.xyz";
+
+/**
+ * Adresse des phu-api-hub.
+ *
+ * Vite ersetzt import.meta.env schon beim Bauen — ein fertiges Abbild hätte
+ * die Adresse also einbetoniert. Deshalb zuerst window.__APP_CONFIG__, das
+ * der Container-Startpunkt zur Laufzeit aus der Umgebungsvariable API_URL
+ * schreibt. Im Entwicklungsbetrieb ist das leer und die .env greift wie bisher.
+ */
+export const API_BASE: string =
+  window.__APP_CONFIG__?.apiUrl?.trim() ||
+  import.meta.env.VITE_API_URL ||
+  FALLBACK;
 
 /**
  * Macht aus API-Pfaden benutzbare URLs.

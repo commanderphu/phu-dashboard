@@ -15,6 +15,7 @@ pnpm-debug.log*
 # Git & lokale Dateien
 .git
 .gitignore
+.env
 .env.local
 .env.development.local
 .env.production.local
