@@ -1,12 +1,25 @@
 # phu-dashboard
 
 Persönliches Control Center im Homelab. React 19 + Vite + TailwindCSS 4 +
-TypeScript, Theme Catppuccin Frappe. Läuft auf cisco im Container
-`phu-dashboard`, Port 5173, **Vite-Dev-Server mit HMR — kein Rebuild nötig bei
-Codeänderungen**. Nur bei neuen Paketen: `docker compose up -d --build`.
+TypeScript, Theme NEOTERRA.
 
-Erreichbar unter `https://dashboard.intern.phudevelopement.xyz`
-(Caddy → `phu-dashboard:5173`, Eintrag in `/srv/infra/Caddyfile` ab Zeile 302).
+Es gibt zwei Stände (seit 23.08.2026):
+
+| | Entwicklung | Produktion |
+|---|---|---|
+| Host | cisco (192.168.178.100) | Gideon/Unraid (192.168.178.99) |
+| Name | `dev-dashboard.intern.phudevelopement.xyz` | `dashboard.intern.phudevelopement.xyz` |
+| Läuft als | Vite-Dev-Server, Port 5173 | nginx im Abbild aus `Dockerfile.prod`, Port 80 |
+| Proxy | Caddy auf cisco, `/srv/infra/Caddyfile` | Caddy auf Gideon, `/mnt/user/appdata/caddy/conf/Caddyfile` |
+
+**Auf cisco kein Rebuild nötig** — HMR greift sofort, das Projektverzeichnis ist
+gemountet. Nur bei neuen Paketen: `docker compose up -d --build`. Änderungen an
+`server:` in `vite.config.ts` (z.B. `allowedHosts`) brauchen dagegen einen
+`docker compose restart`, die liest Vite nur beim Start.
+
+Die Produktion bekommt ihre API-Adresse **zur Laufzeit** über die Umgebungs-
+variable `API_URL` (Startskript schreibt `config.js`, siehe `src/lib/api.ts`) —
+das Abbild ist damit nicht auf eine Adresse festgelegt.
 
 ## Aufbau
 
@@ -32,9 +45,9 @@ src/
 | `https://api.open-meteo.com/v1/forecast` | Wetter (**nicht** OpenWeather, anders als die README behauptet) |
 | VRM/VRS-Widget | Abfahrten Koblenz, eingebettet |
 
-## Befund vom 11.08.2026
+## Befund vom 11.08.2026 — vollständig abgearbeitet
 
-Sortiert nach Gewicht. Nichts davon ist akut kaputt — das Dashboard läuft.
+Alle fünf Punkte sind erledigt. Der Abschnitt bleibt als Chronik stehen.
 
 **1. + 2. erledigt (11.08.2026):** `src/lib/api.ts` exportiert jetzt
 `API_BASE = import.meta.env.VITE_API_URL ?? "https://api.intern.phudevelopement.xyz"`,
@@ -47,19 +60,14 @@ statt hartkodierter URLs. `VITE_SPOTIFY_CLIENT_SECRET` ist aus `.env` und
 gegen `https://dashboard.intern.phudevelopement.xyz` verifiziert (System-,
 Twitch- und Musik-Widget laden, HTTP 200, keine Konsolenfehler).
 
-**3. Produktion fährt den Dev-Server.**
-`docker-compose.yml`: `command: pnpm dev --host`, `NODE_ENV=development`. Kein
-`vite build`, kein `preview`, kein nginx. Intern hinter Caddy vertretbar, aber
-es liefert Source Maps aus, hält einen HMR-Websocket offen und ist spürbar
-langsamer als ein statisches Artefakt. Ein Umbau auf Multi-Stage-Build mit
-nginx wäre die saubere Variante — kostet dafür den Live-Reload beim Entwickeln.
+**3. + 4. erledigt (23.08.2026):** Der Dev-Server ist nicht mehr die
+Produktion. `Dockerfile.prod` baut ein Multi-Stage-Abbild (node:22-alpine →
+nginx:alpine, 63 MB), das auf Gideon läuft. Damit fällt dort auch der Mount des
+ganzen Projektverzeichnisses samt `.env` und `.git` weg — auf cisco bleibt er,
+weil der Dev-Server ihn braucht.
 
-**4. Das ganze Projektverzeichnis ist gemountet** (`.:/workspace`), inklusive
-`.env` und `.git`. Beim Dev-Server bauartbedingt, beim Umbau auf Punkt 3 fällt
-es weg.
-
-**5. Zwei Platzhalterseiten** in `src/routes/index.tsx`: „Energie"
-(PV/Verbrauch) und „Einstellungen" (Theme & Layout).
+**5. erledigt:** Die Platzhalterseiten „Energie" und „Einstellungen" sind raus
+(Commit `e78237f`).
 
 ## Bekannte Fallstricke
 
@@ -68,8 +76,21 @@ es weg.
 - **`.env`-Änderungen brauchen `docker compose up -d`**, nicht `restart`:
   `env_file`/`environment` wird beim *Erstellen* des Containers ausgewertet.
   (Dieselbe Falle wie beim phu-api-hub.)
+- **`vite.config.ts` unter `server:`** (z.B. `allowedHosts`) liest Vite nur beim
+  Start — hier hilft HMR nicht, es braucht `docker compose restart`. Ohne den
+  passenden Eintrag antwortet Vite mit `403 Blocked request`.
 - Die Warnung `[baseline-browser-mapping] data is over two months old` in den
   Logs ist harmlos — nur ein veralteter Datensatz in einer Build-Abhängigkeit.
+- **Nie `sed -i` auf eine als *Datei* gemountete Konfiguration** (Caddyfile,
+  compose-Dateien im Container). `sed -i` schreibt eine neue Datei und benennt
+  um; der Bind-Mount zeigt danach auf die alte Inode und der Container meldet
+  `stale file handle`. `scp` oder Python mit `open(p, "w")` behalten die Inode.
+  Caddys Konfiguration auf Gideon liegt deshalb als *Verzeichnis*-Mount vor.
+- **`pihole-FTL --config dns.hosts` will beim Setzen echtes JSON** —
+  `["192.168.178.3 name.beispiel", …]` —, gibt beim Lesen aber ein anderes
+  Format aus (`[ 192.168.178.3 name.beispiel, … ]`). Das Gelesene lässt sich
+  nicht zurückschreiben. Ungültige Eingaben werden abgelehnt, ohne dass sich
+  der Rückgabewert ändert: die Meldung im Text prüfen, nicht `$?`.
 - Git: Remote `git@github.com:commanderphu/phu-dashboard.git`, Branch `main`.
   **Signieren auf cisco funktioniert nur über gpg-agent-Forwarding** von barry
   (SSH-Sitzung nötig); sonst `-c commit.gpgsign=false`.
@@ -79,4 +100,28 @@ es weg.
 - Instagram-Widget: Der phu-api-hub liest seit 11.08.2026 Follower, Beiträge und
   die Likes/Kommentare des letzten Posts (`src-v2/instagram/stats.service.ts`).
   Ein Endpunkt dort, ein Hook hier — die Daten liegen schon bereit.
-- Punkt 3 (Dev-Server in Produktion) angehen: Multi-Stage-Build mit nginx.
+- Das Abbild über GHCR und eine GitHub-Action bauen lassen, statt es mit
+  `docker save | ssh … docker load` von Hand nach Gideon zu schieben.
+- `package-lock.json` listet noch die entfernten `@dnd-kit`-Pakete.
+- Verwaiste localStorage-Schlüssel: `phu:widget:order`,
+  `phu:widget:collapsed:notizen`, `phu:statcard:musik`.
+
+## Der Proxy auf Gideon (23.08.2026)
+
+Gideon hat einen eigenen Caddy auf **192.168.178.3** (`infra-caddy`,
+Unraid-Vorlage `my-infra-caddy.xml`), damit die Container dort ohne
+veröffentlichte Ports erreichbar sind. Zwei Eigenheiten sind dabei
+entscheidend und leicht zu vergessen:
+
+- **Der Container hängt an br0 *und* an `proxy-net`.** br0 gibt ihm die eigene
+  LAN-Adresse — nötig, weil Unraids nginx die Ports 80/443 auf 192.168.178.99
+  belegt. `proxy-net` gibt ihm die Namensauflösung zu den Zielcontainern.
+  **Docker 20.10 kann beim Erstellen nur ein Netz vergeben**, das zweite muss
+  nach jedem Neuerstellen über die Unraid-Oberfläche nachgereicht werden:
+  `/mnt/user/appdata/caddy/nach-neuerstellen.sh`.
+- **Ein macvlan-Container erreicht seinen eigenen Host nicht.** 192.168.178.99
+  ist von dort aus tot. Home Assistant läuft im `host`-Netz und ist deshalb
+  über das Bridge-Gateway `172.18.0.1:8123` erreichbar (dafür muss
+  `172.18.0.0/16` in HAs `trusted_proxies` stehen, sonst 400). Unraids eigene
+  Oberfläche lauscht nur auf 127.0.0.1 und der LAN-Adresse — `unraid.intern`
+  liegt darum in **ciscos** Caddyfile.

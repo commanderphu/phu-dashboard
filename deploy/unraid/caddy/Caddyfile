@@ -1,0 +1,69 @@
+# ============================================================
+# Caddy auf Gideon (Unraid) — 192.168.178.3
+# ============================================================
+# Gegenstück zu ciscos Caddy. Erreicht die Container auf Gideon
+# über das Docker-Netz "proxy-net" beim Namen, statt über
+# veröffentlichte Ports.
+#
+# Zwei Dinge, die hier wichtig sind:
+#
+#   1. Der Container hängt an br0 (macvlan, eigene LAN-IP) UND an
+#      proxy-net. br0 braucht er, weil Unraids eigenes nginx die
+#      Ports 80/443 auf 192.168.178.99 belegt.
+#
+#   2. Ein macvlan-Container erreicht seinen eigenen Host nicht —
+#      192.168.178.99 ist von hier aus tot. Home Assistant läuft
+#      im host-Netz und lauscht auf allen Adressen, deshalb geht
+#      es über das Bridge-Gateway 172.18.0.1. Unraids Oberfläche
+#      lauscht nur auf 127.0.0.1 und der LAN-IP und ist damit von
+#      hier grundsätzlich nicht erreichbar — der Eintrag dafür
+#      liegt in ciscos Caddyfile.
+# ============================================================
+
+{
+    email callmephu95@gmail.com
+}
+
+# Zertifikat per DNS-01, weil intern.* von außen nicht erreichbar ist.
+(intern) {
+    tls {
+        dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+    }
+
+    encode zstd gzip
+
+    header {
+        X-Frame-Options "SAMEORIGIN"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+}
+
+# ============================================================
+# 🧠 Dashboard — Produktionsabbild (nginx), nicht der Dev-Server
+# ============================================================
+dashboard.intern.phudevelopement.xyz {
+    import intern
+    reverse_proxy phu-dashboard:80
+}
+
+# ============================================================
+# 📄 Paperless-ngx
+# ============================================================
+office.intern.phudevelopement.xyz {
+    import intern
+    reverse_proxy paperless-ngx:8000
+}
+
+# ============================================================
+# 🏠 Home Assistant — host-Netz, über das Bridge-Gateway
+# ============================================================
+home.intern.phudevelopement.xyz {
+    import intern
+
+    # X-Forwarded-For und -Proto setzt Caddy von sich aus. HA muss das
+    # proxy-net dafür in trusted_proxies kennen (configuration.yaml).
+    reverse_proxy 172.18.0.1:8123 {
+        header_up X-Real-IP {remote_host}
+    }
+}

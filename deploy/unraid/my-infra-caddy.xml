@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>infra-caddy</Name>
+  <Repository>infra-caddy:latest</Repository>
+  <Registry/>
+  <Network>br0</Network>
+  <MyIP>192.168.178.3</MyIP>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support/>
+  <Project>https://caddyserver.com/</Project>
+  <Overview>
+Reverse Proxy fuer die Container auf Gideon. Eigenes Abbild mit dem Modul
+dns.providers.cloudflare, damit Let's-Encrypt-Zertifikate ueber DNS-01
+ausgestellt werden koennen (die intern.*-Namen sind von aussen nicht
+erreichbar).
+
+Eigene LAN-Adresse 192.168.178.3 ueber br0, weil Unraids eigenes nginx die
+Ports 80 und 443 auf 192.168.178.99 belegt.
+
+WICHTIG nach jedem Neuerstellen ueber diese Oberflaeche:
+
+    docker network connect proxy-net infra-caddy &amp;&amp; docker restart infra-caddy
+
+Docker 20.10 kann beim Erstellen nur ein Netz zuweisen. Ohne proxy-net
+findet Caddy die Zielcontainer nicht beim Namen und alle Seiten liefern 502.
+Bequemer geht es mit /mnt/user/appdata/caddy/nach-neuerstellen.sh.
+
+Bedient: dashboard.intern, office.intern, home.intern
+(Zu unraid.intern: ein macvlan-Container erreicht seinen eigenen Host nicht,
+deshalb liegt dieser Eintrag in ciscos Caddyfile.)
+  </Overview>
+  <Category>Network:Proxy Tools:</Category>
+  <WebUI>https://dashboard.intern.phudevelopement.xyz/</WebUI>
+  <TemplateURL/>
+  <Icon>https://raw.githubusercontent.com/caddyserver/caddy/master/caddy.png</Icon>
+  <ExtraParams>--restart=unless-stopped --env-file /mnt/user/appdata/caddy/caddy.env</ExtraParams>
+  <PostArgs/>
+  <DateInstalled>1787490390</DateInstalled>
+  <CPUset/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>Docker-Netz "proxy-net" und die Datei /mnt/user/appdata/caddy/caddy.env mit CLOUDFLARE_API_TOKEN (Rechte 600).</Requires>
+  <Config Name="Path: Caddyfile-Verzeichnis" Target="/etc/caddy" Default="/mnt/user/appdata/caddy/conf" Mode="rw" Description="Enthaelt den Caddyfile. Bewusst das Verzeichnis statt der einzelnen Datei: Editoren, die per Rename schreiben (z.B. sed -i), wuerden einen Datei-Mount als 'stale file handle' zerlegen." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/caddy/conf</Config>
+  <Config Name="Path: Zertifikate" Target="/data" Default="/mnt/user/appdata/caddy/data" Mode="rw" Description="Ausgestellte Zertifikate und der ACME-Kontoschluessel. Nicht loeschen, sonst wird alles neu beantragt." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/caddy/data</Config>
+  <Config Name="Path: Caddy-Konfiguration" Target="/config" Default="/mnt/user/appdata/caddy/config" Mode="rw" Description="Automatisch gepflegter Zustand von Caddy." Type="Path" Display="advanced" Required="true" Mask="false">/mnt/user/appdata/caddy/config</Config>
+</Container>
