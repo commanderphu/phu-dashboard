@@ -125,3 +125,30 @@ entscheidend und leicht zu vergessen:
   `172.18.0.0/16` in HAs `trusted_proxies` stehen, sonst 400). Unraids eigene
   Oberfläche lauscht nur auf 127.0.0.1 und der LAN-Adresse — `unraid.intern`
   liegt darum in **ciscos** Caddyfile.
+
+Seit dem 06.09.2026 veröffentlichen `phu-dashboard`, `paperless-ngx` und
+`Redis` **keine Ports** mehr; alles läuft über `proxy-net`. Paperless spricht
+Redis unter `redis://Redis:6379` an. Die drei Unraid-Vorlagen sind mitgezogen —
+wer nur den Container ändert, holt sich den alten Zustand beim nächsten
+Neuerstellen zurück.
+
+Nach außen führt der Tunnel `Gideon-01`: `office.phudevelopement.xyz` →
+`paperless-ngx:8000`, `home.phudevelopement.xyz` → `192.168.178.99:8123`.
+Gepflegt per API mit dem account-owned Token (`cfat_…`) aus
+`~/.credentials/.cloudflare`.
+
+## Cloudflare-Zugangsdaten
+
+`~/.credentials/.cloudflare` liegt seit dem 23.08.2026 im `KEY=value`-Format
+und wird so eingelesen:
+
+```sh
+set -a; . ~/.credentials/.cloudflare; set +a
+```
+
+Enthalten sind `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN` sowie die drei
+R2-Schlüssel. **Ein blankes `cat` liefert keinen Token mehr** — das war vorher
+so und hat die (inzwischen gelöschten) Urlaubsskripte lahmgelegt.
+
+Der Caddy-Token in den beiden Containern ist ein *anderer*, auf DNS
+beschränkter — er kommt an die Tunnel nicht heran. Das ist so gewollt.

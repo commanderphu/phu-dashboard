@@ -16,14 +16,21 @@ docker save phu-dashboard:prod | gzip -1 | ssh gideon 'gunzip | docker load'
 `/boot/config/plugins/dockerMan/templates-user/` auf Gideon. Danach taucht der
 Container in der Unraid-Oberfläche auf und lässt sich dort verwalten.
 
-Einstellbar sind der Port (Standard 8080) und `API_URL`.
+Einstellbar ist `API_URL`. Einen Port veröffentlicht die Vorlage nicht mehr,
+siehe unten.
 
 ## Reverse Proxy auf Gideon
 
 Seit dem 23.08.2026 läuft der Container hinter einem eigenen Caddy und ist
-unter `https://dashboard.intern.phudevelopement.xyz` erreichbar. Der
-veröffentlichte Port wird damit überflüssig — Caddy spricht den Container über
-das Docker-Netz `proxy-net` beim Namen an (`phu-dashboard:80`).
+unter `https://dashboard.intern.phudevelopement.xyz` erreichbar. Caddy spricht
+ihn über das Docker-Netz `proxy-net` beim Namen an (`phu-dashboard:80`), der
+veröffentlichte Port 8080 ist deshalb entfallen.
+
+Dasselbe gilt für die beiden Nachbarn: `paperless-ngx` (früher 8000) und
+`Redis` (früher 6379) laufen ebenfalls ohne offenen Port. Paperless erreicht
+Redis jetzt unter `redis://Redis:6379` statt über die Host-Adresse — beide
+Vorlagen sind entsprechend angepasst, sonst holt ein Neuerstellen über die
+Oberfläche den alten Zustand zurück.
 
 Dazugehörig in `caddy/`:
 
@@ -54,6 +61,27 @@ in HAs `trusted_proxies` stehen, sonst antwortet es mit 400. Unraids eigene
 Oberfläche lauscht nur auf 127.0.0.1 und der LAN-Adresse und ist von dort gar
 nicht erreichbar — `unraid.intern.phudevelopement.xyz` liegt darum in ciscos
 Caddyfile.
+
+Beides hat einen Neustart von Gideon am 06.09.2026 unverändert überstanden:
+Caddy kam mit br0 *und* proxy-net hoch, die drei Container ohne offene Ports.
+Der Nachreichschritt ist also nur nach einem Neuerstellen nötig, nicht nach
+einem Neustart.
+
+## Der Tunnel nach außen
+
+`office.phudevelopement.xyz` läuft über den Cloudflare-Tunnel `Gideon-01` und
+zeigt seit dem 23.08.2026 auf `http://paperless-ngx:8000` statt auf die
+Host-Adresse — auch das über `proxy-net`. `home.phudevelopement.xyz` bleibt
+auf `192.168.178.99:8123`, weil Home Assistant im `host`-Netz läuft.
+
+Die Regeln für `password.*` und `wiki.*` sind entfernt. Sie waren wirkungslos:
+beide Namen zeigen im öffentlichen DNS auf dmz-pub (46.225.163.35), nicht auf
+Cloudflare, und hinter Port 4743 auf Gideon lief nichts mehr.
+
+Gepflegt wird die Konfiguration per API mit dem account-owned Token aus
+`~/.credentials/.cloudflare` (`CLOUDFLARE_API_TOKEN`, Präfix `cfat_`) — es darf
+Tunnel und DNS lesen und schreiben. Der zuvor genutzte user-owned Token durfte
+nur lesen.
 
 ## Zur API-Adresse
 

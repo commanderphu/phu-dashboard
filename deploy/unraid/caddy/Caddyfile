@@ -67,3 +67,11 @@ home.intern.phudevelopement.xyz {
         header_up X-Real-IP {remote_host}
     }
 }
+
+# ============================================================
+# 📝 Obsidian Web Vault — obsidian-remote
+# ============================================================
+obsidian.intern.phudevelopement.xyz {
+    import intern
+    reverse_proxy obsidian-remote:8080
+}
