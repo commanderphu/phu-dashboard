@@ -11,6 +11,7 @@ import { TwitchWidget } from "@/components/widgets/TwitchWidget";
 import { LiveFollowsWidget } from "@/components/widgets/LiveFollowsWidget";
 import { PriceWatchWidget } from "@/components/widgets/PriceWatchWidget";
 import { TodayWidget } from "@/components/widgets/TodayWidget";
+import { VotdWidget } from "@/components/widgets/VotdWidget";
 import { useMusicData } from "@/hooks/useMusicData";
 import { useTwitchStatus } from "@/hooks/useTwitchStatus";
 import { getDailyGreeting } from "@/lib/dailyGreeting";
@@ -53,6 +54,13 @@ export function Overview({ weather }: { weather: Weather }) {
   // Wer hier etwas verschiebt oder ergänzt, muss die Zeilensumme wieder auf 5
   // bringen — sonst entstehen Lücken im Raster.
   const widgets: { id: string; colSpan: string; node: React.ReactNode }[] = [
+    // Zeile 0 — 5 (eigene volle Zeile)
+    {
+      id: "spruch-des-tages",
+      colSpan: "lg:col-span-5",
+      node: <VotdWidget />,
+    },
+
     // Zeile 1 — 2 + 2 + 1
     {
       id: "musik",
