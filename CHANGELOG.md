@@ -16,7 +16,7 @@ Grobe Stichpunkte, noch nicht beschlossen. Reihenfolge = Vorschlag.
 ### Grundlagen (Phase 1)
 - [x] Einheitliches Widget-Muster — erledigt 18.11. (`WidgetCard`, Vorbilder „Heute" und „Spruch des Tages")
 - [ ] Zustände Laden / leer / offline / fehlende Berechtigung — Baustein da, restliche Kacheln umstellen
-- [ ] Morning Summary: Wetter, nächster Termin, eine Aufgabe, wichtigste Meldung; Details auf Abruf
+- [x] Morning Summary — erledigt 18.11. (Kachel „Auf einen Blick")
 - [ ] Workmate-Widget mit Deep Link, Home-Assistant-Kachel mit Deep Link
 - [ ] Mobile Darstellung und Barrierefreiheit prüfen
 
@@ -34,6 +34,7 @@ Grobe Stichpunkte, noch nicht beschlossen. Reihenfolge = Vorschlag.
 ## [Unreleased]
 
 ### Neu
+- Kachel **Auf einen Blick** (Morning Summary, PhuOS Phase 1, Paket 3) ganz oben in der Übersicht: Wetter, nächster Termin, Aufgabe (oder nächste fällige), offener Vault-Punkt, ungelesene Mails; Aktionen „Briefing öffnen" und Workmate. Hook `useMorningSummary` → `GET /briefing/summary`
 - **Einheitliches Widget-Muster** (PhuOS Phase 1, Paket 2): `WidgetCard` mit `status` (ok/Hinweis/Handlungsbedarf/Fehler), `state`-Platzhaltern (lädt/leer/offline/keine Berechtigung), `source` + `updatedAt` („vor X min") und `primaryAction`/`secondaryAction` (intern, extern oder Klick, optional mit Rückfrage). Rückwärtskompatibel.
 - Kachel **Heute**: Status aus Workmate (dringende Aufgabe → Handlungsbedarf), Aktionen „In Workmate öffnen" und „Aktualisieren"
 - Kachel **Spruch des Tages**: Quelle/Aktualisierung, Aktion „Im Briefing ansehen"
