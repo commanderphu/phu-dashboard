@@ -10,7 +10,8 @@ Grobe Stichpunkte, noch nicht beschlossen. Reihenfolge = Vorschlag.
 **Phase 0 (Bestand prüfen) abgeschlossen am 18.11.2026** — Routen, Widgets, Hooks inventarisiert, Mobilansicht geprüft (Layout ok).
 
 ### Fehler (Befund Mobil-Test 18.11.2026)
-- [ ] Briefing-Seite zeigt Telegram-HTML roh (`<code>`, `<i>`) — Tags rendern oder sauber entfernen
+- [ ] Briefing-Seite zeigt Telegram-HTML roh (`<code>`, `<i>`) — `TAG_PATTERN` in `src/lib/briefing.ts` kennt nur `<b>`/`<a>`
+- [ ] News doppelt: Zwischenüberschrift „IT & Tech (Heise)" wird von `parseBriefing()` doppelt ausgegeben (Briefing-Text enthält sie nur einmal)
 
 ### Grundlagen (Phase 1)
 - [ ] Einheitliches Widget-Muster: Titel + Quelle, 1–3 Kennzahlen, Zustand (normal / Hinweis / Handlungsbedarf / Fehler), primäre und sekundäre Aktion, Zeitpunkt der Aktualisierung
