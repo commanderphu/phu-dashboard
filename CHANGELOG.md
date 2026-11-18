@@ -17,7 +17,7 @@ Grobe Stichpunkte, noch nicht beschlossen. Reihenfolge = Vorschlag.
 - [x] Einheitliches Widget-Muster — erledigt 18.11. (`WidgetCard`, Vorbilder „Heute" und „Spruch des Tages")
 - [ ] Zustände Laden / leer / offline / fehlende Berechtigung — Baustein da, restliche Kacheln umstellen
 - [x] Morning Summary — erledigt 18.11. (Kachel „Auf einen Blick")
-- [ ] Workmate-Widget mit Deep Link, Home-Assistant-Kachel mit Deep Link
+- [x] Workmate-Widget mit Deep Link (App-Link), Home-Assistant-Kachel mit Link — erledigt 18.11.
 - [ ] Mobile Darstellung und Barrierefreiheit prüfen
 
 ### Modul Arbeit / Außendienst (Phase 2)
@@ -34,6 +34,7 @@ Grobe Stichpunkte, noch nicht beschlossen. Reihenfolge = Vorschlag.
 ## [Unreleased]
 
 ### Neu
+- Kachel **Zuhause** (PhuOS Phase 1, Paket 4) neben dem Spruch des Tages: Gewicht, Schritte (Ziel 6.000), Auto-Parkposition mit Kartenlink und Fahrtzweck, Handy-Akku; Aktion „Home Assistant öffnen". Nur lesend, Hook `useHomeSummary` → `GET /home/summary`
 - Kachel **Auf einen Blick** (Morning Summary, PhuOS Phase 1, Paket 3) ganz oben in der Übersicht: Wetter, nächster Termin, Aufgabe (oder nächste fällige), offener Vault-Punkt, ungelesene Mails; Aktionen „Briefing öffnen" und Workmate. Hook `useMorningSummary` → `GET /briefing/summary`
 - **Einheitliches Widget-Muster** (PhuOS Phase 1, Paket 2): `WidgetCard` mit `status` (ok/Hinweis/Handlungsbedarf/Fehler), `state`-Platzhaltern (lädt/leer/offline/keine Berechtigung), `source` + `updatedAt` („vor X min") und `primaryAction`/`secondaryAction` (intern, extern oder Klick, optional mit Rückfrage). Rückwärtskompatibel.
 - Kachel **Heute**: Status aus Workmate (dringende Aufgabe → Handlungsbedarf), Aktionen „In Workmate öffnen" und „Aktualisieren"

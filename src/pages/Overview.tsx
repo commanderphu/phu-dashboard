@@ -13,6 +13,7 @@ import { PriceWatchWidget } from "@/components/widgets/PriceWatchWidget";
 import { TodayWidget } from "@/components/widgets/TodayWidget";
 import { VotdWidget } from "@/components/widgets/VotdWidget";
 import { MorningSummaryWidget } from "@/components/widgets/MorningSummaryWidget";
+import { HomeWidget } from "@/components/widgets/HomeWidget";
 import { useMusicData } from "@/hooks/useMusicData";
 import { useTwitchStatus } from "@/hooks/useTwitchStatus";
 import { getDailyGreeting } from "@/lib/dailyGreeting";
@@ -62,11 +63,16 @@ export function Overview({ weather }: { weather: Weather }) {
       node: <MorningSummaryWidget />,
     },
 
-    // Zeile 0b — 5 (eigene volle Zeile)
+    // Zeile 0b — 3 + 2
     {
       id: "spruch-des-tages",
-      colSpan: "lg:col-span-5",
+      colSpan: "lg:col-span-3",
       node: <VotdWidget />,
+    },
+    {
+      id: "zuhause",
+      colSpan: "lg:col-span-2",
+      node: <HomeWidget />,
     },
 
     // Zeile 1 — 2 + 2 + 1
