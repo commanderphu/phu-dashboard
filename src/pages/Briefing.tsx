@@ -37,7 +37,7 @@ function Line({ tokens }: { tokens: Token[] }) {
 }
 
 export function Briefing() {
-  const { data, loading, error, refetch } = useBriefing();
+  const { data, loading, error, regenerate } = useBriefing();
 
   const sections = useMemo(
     () => (data?.text ? parseBriefing(data.text) : []),
@@ -67,10 +67,10 @@ export function Briefing() {
           </p>
         </div>
         <button
-          onClick={refetch}
+          onClick={regenerate}
           className="shrink-0 rounded-xl border border-border bg-surface p-2 text-muted transition-colors hover:border-ok/50 hover:text-fg"
-          aria-label="Neu laden"
-          title="Neu laden"
+          aria-label="Jetzt neu erzeugen"
+          title="Jetzt neu erzeugen (unabhängig vom Telegram-Versand)"
         >
           <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin text-ok" : ""}`} />
         </button>

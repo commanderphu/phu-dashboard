@@ -28,7 +28,8 @@ Grobe Stichpunkte, noch nicht beschlossen. Reihenfolge = Vorschlag.
 
 ## [Unreleased]
 
-_Noch nichts._
+### Neu
+- Briefing-Seite: Button erzeugt das Briefing jetzt **frisch** (`regenerate()` → `POST /telegram/briefing/generate`), unabhängig vom Telegram-Versand — erste PhuOS-Aktion „Briefing neu erzeugen"
 
 ## 2026-11
 
