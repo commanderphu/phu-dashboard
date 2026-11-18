@@ -14,8 +14,8 @@ Grobe Stichpunkte, noch nicht beschlossen. Reihenfolge = Vorschlag.
 - [x] „News doppelt" — kein Fehler: Artefakt des zusammengesetzten Scroll-Screenshots (Text enthält jede Meldung einmal, `parseBriefing()` bildet Zeilen 1:1 ab)
 
 ### Grundlagen (Phase 1)
-- [ ] Einheitliches Widget-Muster: Titel + Quelle, 1–3 Kennzahlen, Zustand (normal / Hinweis / Handlungsbedarf / Fehler), primäre und sekundäre Aktion, Zeitpunkt der Aktualisierung
-- [ ] Zustände Laden / leer / offline / fehlende Berechtigung für alle Widgets
+- [x] Einheitliches Widget-Muster — erledigt 18.11. (`WidgetCard`, Vorbilder „Heute" und „Spruch des Tages")
+- [ ] Zustände Laden / leer / offline / fehlende Berechtigung — Baustein da, restliche Kacheln umstellen
 - [ ] Morning Summary: Wetter, nächster Termin, eine Aufgabe, wichtigste Meldung; Details auf Abruf
 - [ ] Workmate-Widget mit Deep Link, Home-Assistant-Kachel mit Deep Link
 - [ ] Mobile Darstellung und Barrierefreiheit prüfen
@@ -32,6 +32,11 @@ Grobe Stichpunkte, noch nicht beschlossen. Reihenfolge = Vorschlag.
 - [ ] Dynamische Priorisierung der Widgets
 
 ## [Unreleased]
+
+### Neu
+- **Einheitliches Widget-Muster** (PhuOS Phase 1, Paket 2): `WidgetCard` mit `status` (ok/Hinweis/Handlungsbedarf/Fehler), `state`-Platzhaltern (lädt/leer/offline/keine Berechtigung), `source` + `updatedAt` („vor X min") und `primaryAction`/`secondaryAction` (intern, extern oder Klick, optional mit Rückfrage). Rückwärtskompatibel.
+- Kachel **Heute**: Status aus Workmate (dringende Aufgabe → Handlungsbedarf), Aktionen „In Workmate öffnen" und „Aktualisieren"
+- Kachel **Spruch des Tages**: Quelle/Aktualisierung, Aktion „Im Briefing ansehen"
 
 ### Behoben
 - Briefing-Seite: `<i>` und `<code>` aus dem Briefing (Vault-Punkte, Bibelvers) werden jetzt kursiv bzw. als Code dargestellt statt als roher Text (`src/lib/briefing.ts`, `Briefing.tsx`)

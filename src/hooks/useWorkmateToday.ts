@@ -32,6 +32,8 @@ export function useWorkmateToday(intervalMs = 300_000) {
   const [failed, setFailed] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  /** Zeitpunkt der letzten erfolgreichen Abfrage (fetchedAt vom API-Hub). */
+  const [updatedAt, setUpdatedAt] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -44,6 +46,7 @@ export function useWorkmateToday(intervalMs = 300_000) {
       setTasks(json.tasks ?? []);
       setEvents(json.events ?? []);
       setFailed(json.failed ?? []);
+      setUpdatedAt(json.fetchedAt ?? new Date().toISOString());
       setError(null);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Workmate nicht erreichbar");
@@ -66,5 +69,5 @@ export function useWorkmateToday(intervalMs = 300_000) {
     };
   }, [load, intervalMs]);
 
-  return { tasks, events, failed, loading, error, refetch: load };
+  return { tasks, events, failed, loading, error, updatedAt, refetch: load };
 }

@@ -11,6 +11,7 @@ export function useVotd(intervalMs = 300_000) {
   const [votd, setVotd] = useState<Votd | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -19,6 +20,7 @@ export function useVotd(intervalMs = 300_000) {
 
       const json: Votd | null = await res.json();
       setVotd(json);
+      setUpdatedAt(new Date());
       setError(null);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Spruch des Tages nicht erreichbar");
@@ -33,5 +35,5 @@ export function useVotd(intervalMs = 300_000) {
     return () => clearInterval(id);
   }, [load, intervalMs]);
 
-  return { votd, loading, error };
+  return { votd, loading, error, updatedAt, refetch: load };
 }

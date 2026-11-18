@@ -1,5 +1,6 @@
-import { AlertTriangle, CalendarDays, CheckSquare, MapPin } from "lucide-react";
+import { AlertTriangle, CalendarDays, CheckSquare, MapPin, RefreshCw } from "lucide-react";
 import { WidgetCard } from "@/ui/WidgetCard";
+import type { WidgetState, WidgetStatus } from "@/ui/WidgetCard";
 import { useWorkmateToday } from "@/hooks/useWorkmateToday";
 import type { TodayEvent, TodayTask } from "@/hooks/useWorkmateToday";
 
@@ -58,24 +59,68 @@ function Aufgabe({ t }: { t: TodayTask }) {
   );
 }
 
+/** Web-Oberfläche von Workmate Private (Deep Link). */
+const WORKMATE_URL = "https://workmate-private.phudevelopement.xyz";
+
 export function TodayWidget() {
-  const { tasks, events, failed, loading, error } = useWorkmateToday();
+  const { tasks, events, failed, loading, error, updatedAt, refetch } = useWorkmateToday();
 
   const offen = events.filter((e) => e.allDay || Date.now() <= new Date(e.end).getTime()).length;
   const hint =
     tasks.length || events.length
       ? `${tasks.length} Aufgaben · ${offen} Termine offen`
-      : "Workmate";
+      : undefined;
+
+  const hatDaten = tasks.length > 0 || events.length > 0;
+  const dringend = tasks.some((t) => t.urgent);
+
+  // Zustand nur, wenn nichts anzuzeigen ist — vorhandene Daten bleiben sichtbar.
+  const state: WidgetState | undefined = hatDaten
+    ? undefined
+    : loading
+      ? "loading"
+      : error
+        ? "offline"
+        : failed.length === 0
+          ? "empty"
+          : undefined;
+
+  // Was braucht Aufmerksamkeit? Fehler > Dringendes > Teilausfall > alles ok.
+  const status: WidgetStatus | undefined = error
+    ? "error"
+    : dringend
+      ? "action"
+      : failed.length > 0
+        ? "hint"
+        : updatedAt
+          ? "ok"
+          : undefined;
 
   return (
-    <WidgetCard title="Heute" hint={hint} collapsible>
-      {loading && !events.length && !tasks.length && (
-        <p className="text-sm text-muted">Lädt…</p>
-      )}
-
-      {error && (
-        <p className="text-xs text-danger">⚠ {error}</p>
-      )}
+    <WidgetCard
+      title="Heute"
+      hint={hint}
+      collapsible
+      source="Workmate"
+      updatedAt={updatedAt}
+      status={status}
+      state={state}
+      stateMessage={
+        state === "empty"
+          ? "Nichts los heute."
+          : state === "offline"
+            ? `Workmate nicht erreichbar (${error}).`
+            : undefined
+      }
+      primaryAction={{ label: "In Workmate öffnen", href: WORKMATE_URL }}
+      secondaryAction={{
+        label: "Aktualisieren",
+        onClick: refetch,
+        icon: <RefreshCw className="h-3.5 w-3.5" />,
+      }}
+    >
+      {/* Fehler trotz vorhandener (älterer) Daten */}
+      {error && hatDaten && <p className="mb-2 text-xs text-danger">⚠ {error}</p>}
 
       {/* Teilausfall: das Vorhandene trotzdem zeigen, aber ehrlich benennen */}
       {!error && failed.length > 0 && (
@@ -87,10 +132,6 @@ export function TodayWidget() {
             ? "Workmate ist nicht konfiguriert."
             : " konnten nicht geladen werden."}
         </p>
-      )}
-
-      {!loading && !error && !tasks.length && !events.length && failed.length === 0 && (
-        <p className="text-sm text-muted">Nichts los heute.</p>
       )}
 
       {events.length > 0 && (
