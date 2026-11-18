@@ -30,6 +30,8 @@ export interface WidgetAction {
   onClick?: () => void;
   /** Rückfrage vor der Aktion — Pflicht für alles, was nach außen geht. */
   confirm?: string;
+  /** Externe Links im neuen Tab öffnen (Standard). false z. B. für App-Links (intent:). */
+  newTab?: boolean;
   icon?: React.ReactNode;
 }
 
@@ -103,7 +105,13 @@ function ActionButton({ action, primary }: { action: WidgetAction; primary: bool
   }
   if (action.href) {
     return (
-      <a href={action.href} target="_blank" rel="noopener noreferrer" className={style} onClick={confirmed}>
+      <a
+        href={action.href}
+        target={action.newTab === false ? undefined : "_blank"}
+        rel="noopener noreferrer"
+        className={style}
+        onClick={confirmed}
+      >
         {action.icon}
         {action.label}
         <ExternalLink className="h-3 w-3 opacity-60" />

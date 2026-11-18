@@ -37,6 +37,7 @@ Grobe Stichpunkte, noch nicht beschlossen. Reihenfolge = Vorschlag.
 - **Einheitliches Widget-Muster** (PhuOS Phase 1, Paket 2): `WidgetCard` mit `status` (ok/Hinweis/Handlungsbedarf/Fehler), `state`-Platzhaltern (lädt/leer/offline/keine Berechtigung), `source` + `updatedAt` („vor X min") und `primaryAction`/`secondaryAction` (intern, extern oder Klick, optional mit Rückfrage). Rückwärtskompatibel.
 - Kachel **Heute**: Status aus Workmate (dringende Aufgabe → Handlungsbedarf), Aktionen „In Workmate öffnen" und „Aktualisieren"
 - Kachel **Spruch des Tages**: Quelle/Aktualisierung, Aktion „Im Briefing ansehen"
+- Kachel **Heute**: auf Android öffnet „Workmate-App öffnen" direkt die **Workmate-App** (Deep Link `workmate://open` per intent-Link mit Fallback auf die Web-Oberfläche, `src/lib/appLinks.ts`); am PC weiter die Webseite. `WidgetAction.newTab` für Links ohne neuen Tab.
 
 ### Behoben
 - Briefing-Seite: `<i>` und `<code>` aus dem Briefing (Vault-Punkte, Bibelvers) werden jetzt kursiv bzw. als Code dargestellt statt als roher Text (`src/lib/briefing.ts`, `Briefing.tsx`)

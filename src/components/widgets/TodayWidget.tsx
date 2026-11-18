@@ -2,6 +2,7 @@ import { AlertTriangle, CalendarDays, CheckSquare, MapPin, RefreshCw } from "luc
 import { WidgetCard } from "@/ui/WidgetCard";
 import type { WidgetState, WidgetStatus } from "@/ui/WidgetCard";
 import { useWorkmateToday } from "@/hooks/useWorkmateToday";
+import { workmateLink } from "@/lib/appLinks";
 import type { TodayEvent, TodayTask } from "@/hooks/useWorkmateToday";
 
 const uhr = (iso: string) =>
@@ -59,11 +60,9 @@ function Aufgabe({ t }: { t: TodayTask }) {
   );
 }
 
-/** Web-Oberfläche von Workmate Private (Deep Link). */
-const WORKMATE_URL = "https://workmate-private.phudevelopement.xyz";
-
 export function TodayWidget() {
   const { tasks, events, failed, loading, error, updatedAt, refetch } = useWorkmateToday();
+  const workmate = workmateLink();
 
   const offen = events.filter((e) => e.allDay || Date.now() <= new Date(e.end).getTime()).length;
   const hint =
@@ -112,7 +111,11 @@ export function TodayWidget() {
             ? `Workmate nicht erreichbar (${error}).`
             : undefined
       }
-      primaryAction={{ label: "In Workmate öffnen", href: WORKMATE_URL }}
+      primaryAction={{
+        label: workmate.isApp ? "Workmate-App öffnen" : "In Workmate öffnen",
+        href: workmate.href,
+        newTab: !workmate.isApp,
+      }}
       secondaryAction={{
         label: "Aktualisieren",
         onClick: refetch,
