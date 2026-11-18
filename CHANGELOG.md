@@ -10,8 +10,8 @@ Grobe Stichpunkte, noch nicht beschlossen. Reihenfolge = Vorschlag.
 **Phase 0 (Bestand prüfen) abgeschlossen am 18.11.2026** — Routen, Widgets, Hooks inventarisiert, Mobilansicht geprüft (Layout ok).
 
 ### Fehler (Befund Mobil-Test 18.11.2026)
-- [ ] Briefing-Seite zeigt Telegram-HTML roh (`<code>`, `<i>`) — `TAG_PATTERN` in `src/lib/briefing.ts` kennt nur `<b>`/`<a>`
-- [ ] News doppelt: Zwischenüberschrift „IT & Tech (Heise)" wird von `parseBriefing()` doppelt ausgegeben (Briefing-Text enthält sie nur einmal)
+- [x] Briefing-Seite zeigt Telegram-HTML roh — behoben, siehe Unreleased
+- [x] „News doppelt" — kein Fehler: Artefakt des zusammengesetzten Scroll-Screenshots (Text enthält jede Meldung einmal, `parseBriefing()` bildet Zeilen 1:1 ab)
 
 ### Grundlagen (Phase 1)
 - [ ] Einheitliches Widget-Muster: Titel + Quelle, 1–3 Kennzahlen, Zustand (normal / Hinweis / Handlungsbedarf / Fehler), primäre und sekundäre Aktion, Zeitpunkt der Aktualisierung
@@ -32,6 +32,9 @@ Grobe Stichpunkte, noch nicht beschlossen. Reihenfolge = Vorschlag.
 - [ ] Dynamische Priorisierung der Widgets
 
 ## [Unreleased]
+
+### Behoben
+- Briefing-Seite: `<i>` und `<code>` aus dem Briefing (Vault-Punkte, Bibelvers) werden jetzt kursiv bzw. als Code dargestellt statt als roher Text (`src/lib/briefing.ts`, `Briefing.tsx`)
 
 ### Neu
 - Briefing-Seite: Button erzeugt das Briefing jetzt **frisch** (`regenerate()` → `POST /telegram/briefing/generate`), unabhängig vom Telegram-Versand — erste PhuOS-Aktion „Briefing neu erzeugen"

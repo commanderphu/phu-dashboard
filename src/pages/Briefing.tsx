@@ -16,6 +16,20 @@ function Line({ tokens }: { tokens: Token[] }) {
             </strong>
           );
         }
+        if (t.kind === "italic") {
+          return (
+            <em key={i} className="italic">
+              {t.text}
+            </em>
+          );
+        }
+        if (t.kind === "code") {
+          return (
+            <code key={i} className="rounded bg-bg px-1 py-0.5 font-mono text-xs text-fg">
+              {t.text}
+            </code>
+          );
+        }
         if (t.kind === "link") {
           return (
             <a

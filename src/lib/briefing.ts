@@ -1,12 +1,12 @@
 // Der Briefing-Endpunkt liefert Telegram-HTML als einen einzigen String —
 // gebaut für einen Chat, nicht für den Browser. Statt ihn roh ins DOM zu
 // schreiben (die News-Links stammen aus fremden RSS-Feeds) zerlegen wir hier
-// das schmale Subset, das der phu-api-hub tatsächlich erzeugt: <b> und <a>.
+// das schmale Subset, das der phu-api-hub tatsächlich erzeugt: <b>, <i>, <code> und <a>.
 
 const SECTION_SEPARATOR = /\n?─{3,}\n?/;
 
-/** Nur diese Tags erzeugt morningBriefing.service.ts. */
-const TAG_PATTERN = /<(b|a)(?:\s+href="([^"]*)")?>([\s\S]*?)<\/\1>/g;
+/** Nur diese Tags erzeugt der phu-api-hub (Briefing, Vault-Punkte, Bibelvers). */
+const TAG_PATTERN = /<(b|i|code|a)(?:\s+href="([^"]*)")?>([\s\S]*?)<\/\1>/g;
 
 const ENTITIES: Record<string, string> = {
   "&amp;": "&",
@@ -34,9 +34,11 @@ export function safeHref(raw: string): string | null {
 export type Token =
   | { kind: "text"; text: string }
   | { kind: "bold"; text: string }
+  | { kind: "italic"; text: string }
+  | { kind: "code"; text: string }
   | { kind: "link"; text: string; href: string };
 
-/** Eine Zeile in Text-, Fett- und Link-Stücke zerlegen. */
+/** Eine Zeile in Text-, Fett-, Kursiv-, Code- und Link-Stücke zerlegen. */
 export function tokenizeLine(line: string): Token[] {
   const tokens: Token[] = [];
   let cursor = 0;
@@ -55,6 +57,10 @@ export function tokenizeLine(line: string): Token[] {
 
     if (tag === "b") {
       tokens.push({ kind: "bold", text: label });
+    } else if (tag === "i") {
+      tokens.push({ kind: "italic", text: label });
+    } else if (tag === "code") {
+      tokens.push({ kind: "code", text: label });
     } else {
       const url = href ? safeHref(href) : null;
       // Unsichere oder fehlende URL: Text behalten, Link verwerfen.
