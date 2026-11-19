@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import type { MusicProvider } from "@/lib/types";
 import { API_BASE } from "@/lib/api";
+import { authFetch } from "@/lib/auth";
 import { MusicProviderCtx } from "@/hooks/useMusicProvider";
 
 const DEFAULT_PROVIDER: MusicProvider = "spotify";
@@ -31,7 +32,7 @@ export function MusicProviderProvider({ children }: { children: ReactNode }) {
   const toggleProvider = useCallback(async (next: MusicProvider) => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/music/provider`, {
+      const res = await authFetch(`${API_BASE}/music/provider`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ provider: next }),

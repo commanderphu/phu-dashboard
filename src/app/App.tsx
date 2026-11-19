@@ -9,6 +9,7 @@ import { useScrollTop } from "@/hooks/useScrollTop";
 import { useRouteTitle } from "@/hooks/useRouteTitle";
 import { useWeather } from "@/hooks/useWeather";
 import { MusicProviderProvider } from "@/components/MusicProviderProvider";
+import { AuthGate } from "@/ui/AuthGate";
 
 function RouteFallback() {
   return (
@@ -80,12 +81,14 @@ function AppContent() {
 // -----------------------------------------------
 export default function App() {
   return (
-    <Router>
-      {/* Provider-Zustand einmal für die gesamte App — Umschalter und
-          Datenhook teilen sich denselben Wert. */}
-      <MusicProviderProvider>
-        <AppContent />
-      </MusicProviderProvider>
-    </Router>
+    <AuthGate>
+      <Router>
+        {/* Provider-Zustand einmal für die gesamte App — Umschalter und
+            Datenhook teilen sich denselben Wert. */}
+        <MusicProviderProvider>
+          <AppContent />
+        </MusicProviderProvider>
+      </Router>
+    </AuthGate>
   );
 }

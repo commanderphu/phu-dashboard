@@ -1,7 +1,7 @@
 declare global {
   interface Window {
     /** Wird im Produktionsabbild beim Containerstart aus API_URL erzeugt. */
-    __APP_CONFIG__?: { apiUrl?: string };
+    __APP_CONFIG__?: { apiUrl?: string; authIssuer?: string; authClientId?: string };
   }
 }
 

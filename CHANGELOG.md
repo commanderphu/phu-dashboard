@@ -33,6 +33,11 @@ Grobe Stichpunkte, noch nicht beschlossen. Reihenfolge = Vorschlag.
 
 ## [Unreleased]
 
+### Sicherheit
+- **Anmeldung per Keycloak** (PhuOS Phase 2, Paket 0): Realm `homelab`, Client `phu-dashboard`, Authorization Code Flow mit **PKCE (S256)** — ohne Zusatzbibliothek (`src/lib/auth.ts`, Web-Crypto + fetch). Das ganze Dashboard liegt hinter dem Login (`src/ui/AuthGate.tsx`), Rücksprung über `/auth/callback`, Token im sessionStorage, Erneuerung per Refresh-Token
+- Schreibende Aufrufe (Briefing neu erzeugen, Musik-Anbieter) senden den Access-Token über `authFetch` an den api-hub
+- Lokal abschaltbar mit `VITE_AUTH_DISABLED=true`; Issuer/Client über `window.__APP_CONFIG__` oder `VITE_AUTH_*` überschreibbar
+
 ### Neu
 - Kachel **Zuhause** (PhuOS Phase 1, Paket 4) neben dem Spruch des Tages: Gewicht, Schritte (Ziel 6.000), Auto-Parkposition mit Kartenlink und Fahrtzweck, Handy-Akku; Aktion „Home Assistant öffnen". Nur lesend, Hook `useHomeSummary` → `GET /home/summary`
 - Kachel **Auf einen Blick** (Morning Summary, PhuOS Phase 1, Paket 3) ganz oben in der Übersicht: Wetter, nächster Termin, Aufgabe (oder nächste fällige), offener Vault-Punkt, ungelesene Mails; Aktionen „Briefing öffnen" und Workmate. Hook `useMorningSummary` → `GET /briefing/summary`

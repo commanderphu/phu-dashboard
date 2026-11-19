@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { API_BASE } from "@/lib/api";
+import { authFetch } from "@/lib/auth";
 
 export interface Briefing {
   ok: boolean;
@@ -35,7 +36,7 @@ export function useBriefing() {
   const generateBriefing = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${API_BASE}/telegram/briefing/generate`, { method: "POST" });
+      const res = await authFetch(`${API_BASE}/telegram/briefing/generate`, { method: "POST" });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
       const json: Briefing = await res.json();
