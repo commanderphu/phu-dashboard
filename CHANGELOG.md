@@ -33,6 +33,10 @@ Grobe Stichpunkte, noch nicht beschlossen. Reihenfolge = Vorschlag.
 
 ## [Unreleased]
 
+### Neu
+- **Seite „Arbeit“** (`/arbeit`, Dock-Symbol Aktentasche) — Modulansicht für den Außendienst (PhuOS Phase 2)
+- **Kachel „Einsatz“** (Einsatz-Stoppuhr): Call/Kunde, vier große Knöpfe Angekommen / Am Gerät / Ende / Abfahrt (der nächste sinnvolle ist hervorgehoben), „vor Ort seit …“, Tagesliste mit Löschen, Summen am Gerät / vor Ort — `useStopwatch` über `/work/stopwatch` mit Keycloak-Token
+
 ### Sicherheit
 - **Anmeldung per Keycloak** (PhuOS Phase 2, Paket 0): Realm `homelab`, Client `phu-dashboard`, Authorization Code Flow mit **PKCE (S256)** — ohne Zusatzbibliothek (`src/lib/auth.ts`, Web-Crypto + fetch). Das ganze Dashboard liegt hinter dem Login (`src/ui/AuthGate.tsx`), Rücksprung über `/auth/callback`, Token im sessionStorage, Erneuerung per Refresh-Token
 - Schreibende Aufrufe (Briefing neu erzeugen, Musik-Anbieter) senden den Access-Token über `authFetch` an den api-hub

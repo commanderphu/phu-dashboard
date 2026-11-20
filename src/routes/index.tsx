@@ -3,7 +3,7 @@ import { lazy } from "react";
 import type { Weather } from "@/lib/types";
 import type { ReactElement } from "react";
 import { PATH } from "./path";
-import { IconHome, IconBus, IconCloud, IconMusic, IconBriefing } from "./icons";
+import { IconHome, IconBus, IconCloud, IconMusic, IconBriefing, IconWork } from "./icons";
 
 // ⬇️ Lazy-Komponenten (Pages exportieren bei dir "named"; deshalb .then(...default: m.X))
 const OverviewPage    = lazy(() => import("@/pages/Overview").then(m => ({ default: m.Overview })));
@@ -11,6 +11,7 @@ const VerkehrPage     = lazy(() => import("@/pages/Verkehr").then(m => ({ defaul
 const WetterPage      = lazy(() => import("@/pages/Wetter").then(m => ({ default: m.Wetter })));
 const MusicPage       = lazy(() => import("@/pages/MusicPage").then(m => ({ default: m.default })));
 const BriefingPage    = lazy(() => import("@/pages/Briefing").then(m => ({ default: m.Briefing })));
+const ArbeitPage      = lazy(() => import("@/pages/Arbeit").then(m => ({ default: m.Arbeit })));
 
 export type RouteItem = {
   to: string;
@@ -36,6 +37,13 @@ export const routes: RouteItem[] = [
     icon: IconBriefing,
     group: "primary",
     element: () => <BriefingPage />,
+  },
+  {
+    to: PATH.arbeit,
+    label: "Arbeit",
+    icon: IconWork,
+    group: "primary",
+    element: () => <ArbeitPage />,
   },
   {
     to: PATH.verkehr,
