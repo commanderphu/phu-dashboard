@@ -51,8 +51,9 @@ export function useStopwatch(intervalMs = 60_000) {
 
   const load = useCallback(async () => {
     try {
-      const res = await fetch(`${API_BASE}/work/stopwatch`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      // Lesen braucht seit 24.11.2026 ebenfalls den Keycloak-Token (Kunden, Zeiten, GPS-Orte).
+      const res = await authFetch(`${API_BASE}/work/stopwatch`);
+      if (!res.ok) throw new Error(res.status === 401 ? "Nicht angemeldet" : `HTTP ${res.status}`);
       apply(await res.json());
     } catch (e) {
       setError(e instanceof Error ? e.message : "Stoppuhr nicht erreichbar");
